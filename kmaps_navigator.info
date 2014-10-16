@@ -1,0 +1,11 @@
+name = Kmaps Navigator
+description = A drupal module to provide a kmaps navigator in a block.
+core = 7.x
+dependencies[] = libraries (>=2.1)
+dependencies[] = fancytree
+dependencies[] = ajaxsolr
+scripts[]   =  js/kmaps_navigator.js
+scripts[]   =  "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+stylesheets[all][] = stylesheets/kmaps_navigator.css
+stylesheets[all][] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+stylesheets[all][] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
