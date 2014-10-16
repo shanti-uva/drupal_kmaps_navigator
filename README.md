@@ -1,7 +1,9 @@
-Drupal Kmaps Navigator
+Drupal KMaps Navigator
 ======================
 
-A Drupal block module that provides kmaps search and tree navigation
+A Drupal block module that provides kmaps search and tree navigation.
 
-Written and maintained by Yuji Shinozaki (ys2n@virginia.edu) for the Shanti at UVa (http://shanti.virginia.edu)
+Written and maintained by Yuji Shinozaki (ys2n@virginia.edu) for Shanti at UVa (http://shanti.virginia.edu)
+
+
 
