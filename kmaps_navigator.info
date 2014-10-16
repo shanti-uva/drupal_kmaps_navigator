@@ -1,6 +1,7 @@
 name = Kmaps Navigator
 description = A drupal module to provide a kmaps navigator in a block.
 core = 7.x
+package = Shanti
 dependencies[] = libraries (>=2.1)
 dependencies[] = fancytree
 dependencies[] = ajaxsolr
