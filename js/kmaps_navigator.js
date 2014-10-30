@@ -82,7 +82,12 @@ jQuery(function ($) {
                 var listitem = $(".title-field[kid='" + data.node.key + "']");
                 $('.row_selected').removeClass('row_selected');
                 $(listitem).closest('tr').addClass('row_selected');
-                window.location.hash = "id=" + data.node.key;
+
+
+                alert ("navigating");
+                // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
+                // CURRENTLY THIS IS A NASTY KLUDGE
+                window.location = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"") + Settings.type  + "/" + data.node.key;
             },
             glyph: {
                 map: {
@@ -409,7 +414,7 @@ jQuery(function ($) {
             solrUrl: 'http://kidx.shanti.virginia.edu/solr/termindex/'
         });
 
-        alert("adding widget!");
+        // alert("adding widget!");
         Manager.addWidget(new AjaxSolr.ResultWidget({
             id: 'result',
             target: 'div.listview div div.table-responsive table.table-results'
