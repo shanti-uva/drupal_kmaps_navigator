@@ -86,7 +86,7 @@ jQuery(function ($) {
 
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 // CURRENTLY THIS IS A NASTY KLUDGE
-                var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"") + Settings.type  + "/" + data.node.key;
+                var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
                 console.log ("navigating: " + loco );
                 window.location = loco;
             },
