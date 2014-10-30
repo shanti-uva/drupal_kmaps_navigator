@@ -2,24 +2,12 @@
  * Created by ys2n on 10/3/14.
  */
 
-
+console.log("OINK");
 
 jQuery(function ($) {
 
-    var Settings = {
-        type: location.pathname.indexOf('subjects') !== -1 ? "subjects" : "places",
-        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://subjects.kmaps.virginia.edu" : "http://places.kmaps.virginia.edu",
-        mmsUrl: "http://mms.thlib.org",
-        placesUrl: "http://places.kmaps.virginia.edu",
-        subjectsUrl: "http://subjects.kmaps.virginia.edu",
-        placesPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/places',
-        subjectsPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/subjects',
-        mediabaseURL: "http://mediabase.drupal-dev.shanti.virginia.edu"
-    };
-    // search min length
-    const SEARCH_MIN_LENGTH = 2;
 
-    // add a new function overlayMask
+// add a new function overlayMask
     $.fn.overlayMask = function (action) {
         var mask = this.find('.overlay-mask');
 
@@ -52,15 +40,32 @@ jQuery(function ($) {
         return this;
     };
 
+
+
+    console.log("BEGIN");
+
+    var Settings = {
+        type: location.pathname.indexOf('subjects') !== -1 ? "subjects" : "places",
+        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://subjects.kmaps.virginia.edu" : "http://places.kmaps.virginia.edu",
+        mmsUrl: "http://mms.thlib.org",
+        placesUrl: "http://places.kmaps.virginia.edu",
+        subjectsUrl: "http://subjects.kmaps.virginia.edu",
+        placesPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/places',
+        subjectsPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/subjects',
+        mediabaseURL: "http://mediabase.drupal-dev.shanti.virginia.edu"
+    };
+    // search min length
+    const SEARCH_MIN_LENGTH = 2;
+
     $(function () {
 
+        //  Let's not do this as globals....
         // set the popover defaults
-     $.fn.popover.Constructor.DEFAULTS.trigger = 'hover';
-     $.fn.popover.Constructor.DEFAULTS.placement = 'left';
-     $.fn.popover.Constructor.DEFAULTS.html = true;
-     $.fn.popover.Constructor.DEFAULTS.delay.hide = '5000';
-     $.fn.popover.Constructor.DEFAULTS.container = 'body';
-
+     //$.fn.popover.Constructor.DEFAULTS.trigger = 'hover';
+     //$.fn.popover.Constructor.DEFAULTS.placement = 'left';
+     //$.fn.popover.Constructor.DEFAULTS.html = true;
+     //$.fn.popover.Constructor.DEFAULTS.delay.hide = '5';
+     //$.fn.popover.Constructor.DEFAULTS.container = 'body';
 
         $("#tree").fancytree({
             extensions: [/*"glyph",*/ "filter"],
@@ -188,11 +193,16 @@ jQuery(function ($) {
                     },
                     title: function () {
                         return node.title + "<span class='kmapid-display'>" + node.key + "</span>";
-                    }
+                    },
+                    trigger: 'hover',
+                    placement: 'left',
+                    delay: { hide: 5 },
+                    container: 'body'
+
                 }
             );
             jQuery(elem).on('shown.bs.popover', function populateCounts(x) {
-                $(".popover").addClass("searchPop"); // target css styles on search tree popups
+                $(".popover").addClass("search-popup"); // target css styles on search tree popups
                 var counts = $("#infowrap" + node.key + " .counts-display");
                 var txt = $('#searchform').val();
                 $('.popover-caption').highlight(txt, {element: 'mark'});
@@ -318,7 +328,11 @@ jQuery(function ($) {
 
                 $(this.target).find('tr').popover(
                     {
-                        "template": '<div class="popover searchPop" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+                        trigger: 'hover',
+                        placement: 'left',
+                        delay: { hide: 5 },
+                        container: 'body',
+                        "template": '<div class="popover search-popup" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
                     }
 
                     // '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
@@ -394,6 +408,8 @@ jQuery(function ($) {
         Manager = new AjaxSolr.Manager({
             solrUrl: 'http://kidx.shanti.virginia.edu/solr/termindex/'
         });
+
+        alert("adding widget!");
         Manager.addWidget(new AjaxSolr.ResultWidget({
             id: 'result',
             target: 'div.listview div div.table-responsive table.table-results'

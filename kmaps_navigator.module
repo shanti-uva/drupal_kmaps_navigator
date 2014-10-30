@@ -63,7 +63,7 @@ function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
             return $block;
             break;
         default:
-            error_log("WHY WHY WHY? default block_view case.  delta = " . $delta);
+//            error_log("WHY WHY WHY? default block_view case.  delta = " . $delta);
             $block = _kmaps_navigator_block();
             return $block;
             break;
@@ -99,8 +99,11 @@ function kmaps_navigator_theme() {
                 '#attached' => array(
                     'libraries_load' => array(
                         array(
-                            'fancytree','ajaxsolr'
+                            'fancytree'
                         ),
+                        array(
+                            'ajaxsolr'
+                        )
                     ),
                 )
             )

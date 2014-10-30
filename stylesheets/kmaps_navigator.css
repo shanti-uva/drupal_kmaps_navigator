@@ -586,36 +586,36 @@ table.dataTable thead .sorting_asc{ background:none;border:none;width:0;min-widt
 
 
 /* ----- BEGIN tooltip popup on search view-section ----- */
-.searchPop{ display:none; }
-.searchPop > .popover-title{ font-size:0.88em; line-height:1.12em; padding:12px 12px 7px; position:relative;}
-.searchPop > .popover-title .kmapid-display { 
+.search-popup{ display:none; }
+.search-popup > .popover-title{ font-size:0.88em; line-height:1.12em; padding:12px 12px 7px; position:relative;}
+.search-popup > .popover-title .kmapid-display {
 	position:absolute; top:2px; right:10px; 
   font-size: 0.75em;
   white-space:nowrap;
   margin: 0;
   color: #707070;
 }
-.searchPop > .popover-title .kmapid-display:before { /* content: "" */ }
-.searchPop > .popover-content{
+.search-popup > .popover-title .kmapid-display:before { /* content: "" */ }
+.search-popup > .popover-content{
 	font-family: "Museo Sans", "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
 	font-size: 0.75em;
 	padding-top:4px 12px;	
 }
-.searchPop > .popover-content > p {
+.search-popup > .popover-content > p {
 	padding:0 8px;
 	margin:5px 0 0;
 	font-size: 1.18em;
 	border-left:4px solid #f0f0f0;
 	font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
 }
-.searchPop > .popover-content > .kmap-path{
+.search-popup > .popover-content > .kmap-path{
 	display:inline;
 	font-size: 0.93em;
 	line-height:1em;
 	-ms-word-break: break-all;
   word-break: break-all;
 }
-.searchPop > .counts-display {
+.search-popup > .counts-display {
   display: block;
   float: right;
   clear: both;
@@ -624,9 +624,9 @@ table.dataTable thead .sorting_asc{ background:none;border:none;width:0;min-widt
   margin-right: 0;
   color: #888;
 }
-.searchPop > .popover-content .info-wrap { min-width: 18em;}
-.searchPop > .popover-content .counts-display { display:block; height: 4.12em; padding:5px; margin-top:2px;}
-.searchPop > .popover-content .badge {
+.search-popup > .popover-content .info-wrap { min-width: 18em;}
+.search-popup > .popover-content .counts-display { display:block; height: 4.12em; padding:5px; margin-top:2px;}
+.search-popup > .popover-content .badge {
   margin:0 5px;
   position: relative;
   top: 22px;
@@ -641,11 +641,11 @@ table.dataTable thead .sorting_asc{ background:none;border:none;width:0;min-widt
   padding:1px 6px; 
 	font-weight:normal;
 }
-.searchPop > .popover-content .associated{ /* background:#f0f0f0; */ text-align:center; float:right; position:relative; top:5px; height:36px; margin:0 0 5px 0; border-left:1px solid #ddd; }
-.searchPop > .popover-content .associated:first-child{
+.search-popup > .popover-content .associated{ /* background:#f0f0f0; */ text-align:center; float:right; position:relative; top:5px; height:36px; margin:0 0 5px 0; border-left:1px solid #ddd; }
+.search-popup > .popover-content .associated:first-child{
 	margin-right:-17px;
 }
-.searchPop > .popover-content .associated i{
+.search-popup > .popover-content .associated i{
 	font-size:1.56em;
 	position:absolute;
 	bottom:17px;
