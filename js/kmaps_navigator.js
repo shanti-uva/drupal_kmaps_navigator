@@ -68,7 +68,7 @@ jQuery(function ($) {
      //$.fn.popover.Constructor.DEFAULTS.container = 'body';
 
         $("#tree").fancytree({
-            extensions: [/*"glyph",*/ "filter"],
+            extensions: [ "filter", "glyph"],
             checkbox: false,
             selectMode: 2,
             debugLevel: 0,
@@ -88,7 +88,7 @@ jQuery(function ($) {
                 // CURRENTLY THIS IS A NASTY KLUDGE
                 var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
                 console.log ("navigating: " + loco );
-                window.location = loco;
+                // window.location = loco;
             },
             glyph: {
                 map: {

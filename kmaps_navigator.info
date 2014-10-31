@@ -5,7 +5,8 @@ package = Shanti
 dependencies[] = libraries (>=2.1)
 dependencies[] = fancytree
 dependencies[] = ajaxsolr
-scripts[]   =  js/kmaps_navigator.js
+; not sure if this should be here or not...  confusing!
+; scripts[]   =  js/kmaps_navigator.js
 scripts[]   =  "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
 stylesheets[all][] = stylesheets/kmaps_navigator.css
 stylesheets[all][] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
