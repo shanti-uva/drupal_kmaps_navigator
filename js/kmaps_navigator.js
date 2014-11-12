@@ -71,11 +71,13 @@ jQuery(function ($) {
             extensions: [ "filter", "glyph"],
             checkbox: false,
             selectMode: 2,
+            theme: 'bootstrap',
             debugLevel: 0,
-            autoScroll: true,
-            // closeOnExternalClick:false,
-            // flapMargin:0,
-            filter: {mode: 'hide'},
+            // autoScroll: true,
+            filter: {
+                mode: "hide",
+                leavesOnly: false
+            },
             activate: function (event, data) {
                 // console.log("activate " + data.node.key);
 
