@@ -83,12 +83,32 @@ jQuery(function ($) {
                 $('.row_selected').removeClass('row_selected');
                 $(listitem).closest('tr').addClass('row_selected');
 
+                $('#ajax-id-' + data.node.key).once('ajax-id-' + data.node.key, function() {
+                    var base = $(this).attr('id');
+                    var argument = $(this).attr('argument');
+
+                    var element_settings = {
+                      url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs',
+                      event: 'click',
+                      progress: {
+                        type: 'throbber'
+                      }
+                    };
+                    Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
+                    $(this).click();
+                });
 
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 // CURRENTLY THIS IS A NASTY KLUDGE
-                var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
-                console.log ("navigating: " + loco );
+                //var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
+                //console.log ("navigating: " + loco );
                 // window.location = loco;
+            },
+            createNode: function (event, data) {
+                console.log(data);
+                var nodeUrl = location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
+                data.node.span.childNodes[2].innerHTML = '<a href="' + nodeUrl + '" class="use-ajax" id="ajax-id-' + data.node.key + '">' + data.node.title + '</a>';
+                return data;
             },
             glyph: {
                 map: {
