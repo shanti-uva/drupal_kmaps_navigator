@@ -57,6 +57,9 @@ function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
     drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css",array('type' => 'external'));
     drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",array('type' => 'external'));
 
+    //Add Ajax library
+    drupal_add_library('system', 'drupal.ajax');
+
     switch ($delta) {
         case 'kmaps_navigator_block':
 //            error_log("kmaps navigator block view");
@@ -106,6 +109,9 @@ function kmaps_navigator_theme() {
                         array(
                             'ajaxsolr'
                         )
+                    ),
+                    'library' => array(
+                        'system', 'drupal.ajax'
                     ),
                 )
             )
