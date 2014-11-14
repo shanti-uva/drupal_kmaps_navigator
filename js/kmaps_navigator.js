@@ -102,6 +102,20 @@ jQuery(function ($) {
                 });
 
 
+                $('#ajax-id-' + data.node.key).once('ajax-id-' + data.node.key, function() {
+                    var base = $(this).attr('id');
+                    var argument = $(this).attr('argument');
+
+                    var element_settings = {
+                      url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs',
+                      event: 'click',
+                      progress: {
+                        type: 'throbber'
+                      }
+                    };
+                    Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
+                    $(this).click();
+                });
 
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 // CURRENTLY THIS IS A NASTY KLUDGE
