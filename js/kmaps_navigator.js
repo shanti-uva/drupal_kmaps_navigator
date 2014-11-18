@@ -2,6 +2,8 @@
  * Created by ys2n on 10/3/14.
  */
 
+console.log("OINK");
+
 jQuery(function ($) {
 
 
@@ -100,8 +102,6 @@ jQuery(function ($) {
                     $(this).click();
                 });
 
-
-
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 // CURRENTLY THIS IS A NASTY KLUDGE
                 //var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
@@ -133,7 +133,7 @@ jQuery(function ($) {
                 url: Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val(),
                 cache: false,
                 debugDelay: 1000,
-                timeout: 45000,
+                timeout: 30000,
                 error: function (e) {
                     notify.warn("networkerror", "Error retrieving tree from kmaps server.");
                 },
