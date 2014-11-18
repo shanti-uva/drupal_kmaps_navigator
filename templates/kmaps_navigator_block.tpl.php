@@ -9,7 +9,7 @@
 
 <section id="kmaps-search" role="search">
     <!-- BEGIN Input section -->
-    <section class="input-section" style="display:block;">
+    <section class="input-section" style="display:none;">
         <form class="form">
             <fieldset>
                 <div class="search-group">
@@ -31,7 +31,7 @@
 
                 <div id="notification-wrapper"></div>
 
-                <section class="advanced-view" style="display:block;">
+                <section class="advanced-view" style="display:none;">
                     <div class="form-group" id="searchScopeGroup">
                         <label class="radio-inline" for="scopeAll">
                             <input type="radio" name="scope" id="scopeAll" value="all" checked="checked">
@@ -154,7 +154,7 @@
         <div class="tab-content">
             <!-- TAB - tree view -->
             <div class="treeview tab-pane active">
-                <div id="tree" class="view-wrap">THIS IS A TEST<!-- view-wrap controls tree container height --></div>
+                <div id="tree" class="view-wrap"><!-- view-wrap controls tree container height --></div>
             </div>
             <!-- TAB - list view -->
             <div class="listview tab-pane">

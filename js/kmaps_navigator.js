@@ -2,8 +2,6 @@
  * Created by ys2n on 10/3/14.
  */
 
-console.log("OINK");
-
 jQuery(function ($) {
 
 
@@ -74,6 +72,7 @@ jQuery(function ($) {
             theme: 'bootstrap',
             debugLevel: 0,
             // autoScroll: true,
+            autoScroll: true,
             filter: {
                 mode: "hide",
                 leavesOnly: false
@@ -81,10 +80,11 @@ jQuery(function ($) {
             activate: function (event, data) {
                 // console.log("activate " + data.node.key);
 
+                event.preventDefault();
+
                 var listitem = $(".title-field[kid='" + data.node.key + "']");
                 $('.row_selected').removeClass('row_selected');
                 $(listitem).closest('tr').addClass('row_selected');
-
                 $('#ajax-id-' + data.node.key).once('ajax-id-' + data.node.key, function() {
                     var base = $(this).attr('id');
                     var argument = $(this).attr('argument');
@@ -100,6 +100,8 @@ jQuery(function ($) {
                     $(this).click();
                 });
 
+
+
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 // CURRENTLY THIS IS A NASTY KLUDGE
                 //var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
@@ -107,9 +109,7 @@ jQuery(function ($) {
                 // window.location = loco;
             },
             createNode: function (event, data) {
-                console.log(data);
-                var nodeUrl = location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
-                data.node.span.childNodes[2].innerHTML = '<a href="' + nodeUrl + '" class="use-ajax" id="ajax-id-' + data.node.key + '">' + data.node.title + '</a>';
+                data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
                 return data;
             },
             glyph: {
@@ -133,7 +133,7 @@ jQuery(function ($) {
                 url: Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val(),
                 cache: false,
                 debugDelay: 1000,
-                timeout: 30000,
+                timeout: 45000,
                 error: function (e) {
                     notify.warn("networkerror", "Error retrieving tree from kmaps server.");
                 },
@@ -144,7 +144,8 @@ jQuery(function ($) {
                     maskSearchResults(false);
                 }
             },
-            focus: function (event, data) { /* data.node.scrollIntoView(true); */
+            focus: function (event, data) {
+                data.node.scrollIntoView(true);
             },
             renderNode: function (event, data) {
                 if (!data.node.isStatusNode) {
@@ -154,6 +155,68 @@ jQuery(function ($) {
             cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
             idPrefix: "kmaps1tree"
         });
+
+        $('.advanced-link').click ( function () {
+            $(this).toggleClass("show-advanced",'fast');
+            $(".advanced-view").slideToggle('fast');
+            $(".advanced-view").toggleClass("show-options");
+            $(".view-wrap").toggleClass("short-wrap"); // ----- toggle class for managing view-section height
+            // kmaps_placesHeight();
+            // kmaps_subjectsHeight();
+        });
+
+        $('#searchform').attr('autocomplete', 'off'); // turn off browser autocomplete
+
+        //    $('.table-v').on('shown.bs.tab', function() { $('.title-field').trunk8(); });
+        $('.listview').on('shown.bs.tab', function () {
+
+            if ($('div.listview div div.table-responsive table.table-results tr td').length == 0) {
+                notify.warn("warnnoresults", "Enter a search above.");
+            }
+
+            var header = (location.pathname.indexOf('subjects') !== -1) ? "<th>Name</th><th>Root Category</th>" : "<th>Name</th><th>Feature Type</th>";
+            $('div.listview div div.table-responsive table.table-results tr:has(th):not(:has(td))').html(header);
+            $("table.table-results tbody td span").trunk8({tooltip: false});
+
+            if ($('.row_selected')[0]) {
+                if ($('.listview')) {
+                    var me = $('div.listview').find('.row_selected');
+                    var myWrapper = me.closest('.view-wrap');
+                    var scrollt = me.offset().top;
+
+                    myWrapper.animate({
+                        scrollTop: scrollt
+                    }, 2000);
+                }
+            }
+        });
+        $('.treeview').on('shown.bs.tab', function () {
+
+            // This doesn't always scroll correctly
+            var activeNode = $('#tree').fancytree("getTree").getActiveNode();
+            if (activeNode) {
+                activeNode.makeVisible();
+            }
+        });
+        $('#tree').on('click', '.fancytree-statusnode-error', function () {
+            $('#tree').fancytree();
+        });
+
+        // iCheck fixup -- added by gketuma
+        $('nav li.form-group input[name=option2]').on('ifChecked', function (e) {
+            var newSource = Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val();
+            $("#tree").fancytree("option", "source.url", newSource);
+        });
+
+
+
+
+
+
+
+
+
+
     });
 
     function maskSearchResults(isMasked) {
@@ -166,42 +229,7 @@ jQuery(function ($) {
         $('#tree').overlayMask(showhide);
     }
 
-    $('#searchform').attr('autocomplete', 'off'); // turn off browser autocomplete
 
-    //    $('.table-v').on('shown.bs.tab', function() { $('.title-field').trunk8(); });
-    $('.listview').on('shown.bs.tab', function () {
-
-        if ($('div.listview div div.table-responsive table.table-results tr td').length == 0) {
-            notify.warn("warnnoresults", "Enter a search above.");
-        }
-
-        var header = (location.pathname.indexOf('subjects') !== -1) ? "<th>Name</th><th>Root Category</th>" : "<th>Name</th><th>Feature Type</th>";
-        $('div.listview div div.table-responsive table.table-results tr:has(th):not(:has(td))').html(header);
-        $("table.table-results tbody td span").trunk8({tooltip: false});
-
-        if ($('.row_selected')[0]) {
-            if ($('.listview')) {
-                var me = $('div.listview').find('.row_selected');
-                var myWrapper = me.closest('.view-wrap');
-                var scrollt = me.offset().top;
-
-                myWrapper.animate({
-                    scrollTop: scrollt
-                }, 2000);
-            }
-        }
-    });
-    $('.treeview').on('shown.bs.tab', function () {
-
-        // This doesn't always scroll correctly
-        var activeNode = $('#tree').fancytree("getTree").getActiveNode();
-        if (activeNode) {
-            activeNode.makeVisible();
-        }
-    });
-    $('#tree').on('click', '.fancytree-statusnode-error', function () {
-        $('#tree').fancytree();
-    });
 
     function decorateElementWithPopover(elem, node) {
 
@@ -269,13 +297,7 @@ jQuery(function ($) {
         return elem;
     };
 
-    // iCheck fixup -- added by gketuma
-    $('nav li.form-group input[name=option2]').on('ifChecked', function (e) {
-        var newSource = Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val();
-        $("#tree").fancytree("option", "source.url", newSource);
-    });
-
-    var searchUtil = {
+   var searchUtil = {
         clearSearch: function () {
 //        console.log("BANG: searchUtil.clearSearch()");
             if ($('#tree').fancytree('getActiveNode')) {

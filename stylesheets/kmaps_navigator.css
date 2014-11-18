@@ -176,7 +176,7 @@
 .input-section .search-group .checkbox-inline:first-child{ margin-right: 5px;}
 .input-section .search-group .checkbox-inline>div{ margin-right: 4px;}
 /*----- Advanced Options -----*/
-.advanced-view{ /*** height:275px;  height can help control cross-browser issues ***/ padding:0 0 10px; background:#f8f8f8; width:100%; margin-right:4px;}
+.advanced-view{ /*** height:275px;  height can help control cross-browser issues ***/ padding:0 0 10px; background:#f8f8f8; width:100%; margin-right:4px; display:none }
 .advanced-view .form-group{ border-top:1px solid #e0e0e0; margin:0 8px;}
 .advanced-view .form-group.last{ padding-bottom:0;}
 
@@ -394,6 +394,9 @@ border-bottom:1px solid #ccc; position:relative; z-index:99999;} */
 	transition: background-color 100ms;
 
 }
+
+
+
 .view-section .nav-tabs>li>a:hover, 
 .view-section .nav-tabs>li>a:focus{  border-color:#ddd; border-top:2px solid #ccc; color:#333; background:white;}
 .view-section .nav-tabs>li.active>a, 
@@ -728,8 +731,8 @@ table.dataTable thead .sorting_asc{ background:none;border:none;width:0;min-widt
     top: 0;
 }
 .view-section tr.row_selected {
-    /* display: block; */
-    background: #fff;
+    display: table-row !important;
+    background: #fee !important;
     -webkit-box-shadow: 0 0 3px 0 #aaa;
     box-shadow: 0 0 3px 0 #aaa;
     border-collapse: separate; /* fix for ie9 shadow */
