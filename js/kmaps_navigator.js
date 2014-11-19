@@ -209,12 +209,9 @@ jQuery(function ($) {
         });
 
 
+        // kludge, I would think...
 
-
-
-
-
-
+        $('#kmaps-search form').on('submit', function(event,target) { event.preventDefault(); });
 
 
     });
