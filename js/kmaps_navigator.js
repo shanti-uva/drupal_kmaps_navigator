@@ -99,8 +99,10 @@ jQuery(function ($) {
                       }
                     };
                     Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
-                    $(this).click();
+
                 });
+
+                $(this).click();
 
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 // CURRENTLY THIS IS A NASTY KLUDGE
