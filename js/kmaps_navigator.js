@@ -59,14 +59,6 @@ jQuery(function ($) {
 
     $(function () {
 
-        //  Let's not do this as globals....
-        // set the popover defaults
-     //$.fn.popover.Constructor.DEFAULTS.trigger = 'hover';
-     //$.fn.popover.Constructor.DEFAULTS.placement = 'left';
-     //$.fn.popover.Constructor.DEFAULTS.html = true;
-     //$.fn.popover.Constructor.DEFAULTS.delay.hide = '5';
-     //$.fn.popover.Constructor.DEFAULTS.container = 'body';
-
         $("#tree").fancytree({
             extensions: [ "filter", "glyph"],
             checkbox: false,
@@ -82,35 +74,31 @@ jQuery(function ($) {
             activate: function (event, data) {
                 // console.log("activate " + data.node.key);
 
+
+                // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 event.preventDefault();
 
                 var listitem = $(".title-field[kid='" + data.node.key + "']");
                 $('.row_selected').removeClass('row_selected');
                 $(listitem).closest('tr').addClass('row_selected');
-                $('#ajax-id-' + data.node.key).once('ajax-id-' + data.node.key, function() {
+                $('#ajax-id-' + data.node.key).trigger('navigate').once('ajax-id-' + data.node.key, function() {
                     var base = $(this).attr('id');
                     var argument = $(this).attr('argument');
 
                     var element_settings = {
                       url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs',
-                      event: 'click',
+                      event: 'navigate',
                       progress: {
                         type: 'throbber'
                       }
                     };
                     Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
-
-                });
-
-                $(this).click();
-
-                // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
-                // CURRENTLY THIS IS A NASTY KLUDGE
-                //var loco = ((location.pathname.indexOf('drupal')!= -1)?"/drupal/":"/") + Settings.type  + "/" + data.node.key;
-                //console.log ("navigating: " + loco );
-                // window.location = loco;
+                }).trigger('navigate');
             },
             createNode: function (event, data) {
+                //if (!data.node.isStatusNode) {
+                //    decorateElementWithPopover(data.node.span, data.node);
+                //}
                 data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
                 return data;
             },
@@ -150,9 +138,11 @@ jQuery(function ($) {
                 data.node.scrollIntoView(true);
             },
             renderNode: function (event, data) {
-                if (!data.node.isStatusNode) {
+
+                //console.log("renderNode:  " + data.node.span);
+                //if (!data.node.isStatusNode) {
                     decorateElementWithPopover(data.node.span, data.node);
-                }
+                //}
             },
             cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
             idPrefix: "kmaps1tree"
@@ -232,6 +222,7 @@ jQuery(function ($) {
 
     function decorateElementWithPopover(elem, node) {
 
+        // console.log("decorating " + elem + " with popover");
         if (jQuery(elem).popover) {
             jQuery(elem).attr('rel', 'popover');
             var txt = $('#searchform').val();
