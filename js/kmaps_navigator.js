@@ -157,6 +157,13 @@ jQuery(function ($) {
             // kmaps_subjectsHeight();
         });
 
+        $("#searchbutton").on('click',function() {
+            //alert("boo");
+            console.log("triggering doSearch!");
+            $("#searchform").trigger('doSearch');
+        })
+
+
         $('#searchform').attr('autocomplete', 'off'); // turn off browser autocomplete
 
         //    $('.table-v').on('shown.bs.tab', function() { $('.title-field').trunk8(); });
@@ -190,6 +197,7 @@ jQuery(function ($) {
                 activeNode.makeVisible();
             }
         });
+
         $('#tree').on('click', '.fancytree-statusnode-error', function () {
             $('#tree').fancytree();
         });
@@ -457,7 +465,8 @@ jQuery(function ($) {
 
         Manager.addWidget(new AjaxSolr.TextWidget({
             id: 'textsearch',
-            target: '#searchform'
+            target: '#searchform',
+            notify: notify
         }));
 
         Manager.init();
@@ -572,10 +581,10 @@ jQuery(function ($) {
             }
         });
     });
-}(jQuery));
 
 
-jQuery(function ($) {
+
+
     var kms = $("#searchform"); // the main search input
     $(kms).data("holder", $(kms).attr("placeholder"));
 
@@ -610,7 +619,10 @@ jQuery(function ($) {
         searchUtil.clearSearch();
     });
 
+
+
 }(jQuery));
+
 
 
 
