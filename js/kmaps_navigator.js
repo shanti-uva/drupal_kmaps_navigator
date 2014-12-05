@@ -84,9 +84,8 @@ jQuery(function ($) {
                 $('#ajax-id-' + data.node.key).trigger('navigate').once('ajax-id-' + data.node.key, function() {
                     var base = $(this).attr('id');
                     var argument = $(this).attr('argument');
-
                     var element_settings = {
-                      url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs',
+                      url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + '/' + Settings.type + '/' + data.node.key + '/overview/nojs',
                       event: 'navigate',
                       progress: {
                         type: 'throbber'
