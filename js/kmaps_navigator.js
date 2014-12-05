@@ -102,6 +102,10 @@ jQuery(function ($) {
                 data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
                 return data;
             },
+            renderNode: function (event, data) {
+                data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
+                return data;
+            },
             glyph: {
                 map: {
                     doc: "",
