@@ -16,7 +16,7 @@
                     <div class="input-group" id="searcharea">
                         <input type="text" class="form-control kms" id="searchform" placeholder="Enter Search...">
                         <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" id="searchbutton"><span class="glyphicon"></span></button>
+                          <button type="button" class="btn btn-default" id="searchbutton"><span class="icon"></span></button>
                           <button type="reset" class="btn searchreset"><span class="icon"></span></button>
                         </span>
                     </div>
