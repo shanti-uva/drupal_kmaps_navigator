@@ -16,8 +16,8 @@
                     <div class="input-group" id="searcharea">
                         <input type="text" class="form-control kms" id="searchform" placeholder="Enter Search...">
                         <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" id="searchbutton"><i class="icon"></i></button>
-                          <button type="reset" class="btn searchreset"><i class="icon"></i></button>
+                          <button type="button" class="btn btn-default" id="searchbutton"><span class="glyphicon"></span></button>
+                          <button type="reset" class="btn searchreset"><span class="icon"></span></button>
                         </span>
                     </div>
 
@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>
                         <label class="checkbox-inline" ><input type="checkbox" id="essayscope" name="essay-scope" data-value="essays">Essays</label>
-                        <a href="#" class="advanced-link toggle-link"><i class="icon"></i>Advanced</a>
+                        <a href="#" class="advanced-link toggle-link"><span class="icon"></span>Advanced</a>
                     </div>
                 </div><!-- END search group -->
 
@@ -59,7 +59,7 @@
                     <div class="form-group advanced-input feature-group dropdown" style="display:none;">
                         <span class="filter type"><label>Filter:</label> <span id="matches1"></span></span>
                         <input class="form-control feature-type" id="feature-type" name="feature-type" type="text" placeholder="Filter by Feature Type">
-                        <button id="feature1a-reset" class="feature-reset"><i class="icon"></i></button>
+                        <button id="feature1a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-type">
                             <div class="tree-wrap">
@@ -70,7 +70,7 @@
 
                                 <div class="feature-submit">
                                     <button type="button" id="feature1-select" class="btn btn-default">Select</button>
-                                    <button type="reset" id="feature1b-reset" class="btn btn-default clear-form">Cancel<i class="icon"></i></button>
+                                    <button type="reset" id="feature1b-reset" class="btn btn-default clear-form">Cancel<span class="icon"></span></button>
                                 </div>
 
                             </div>
@@ -82,7 +82,7 @@
                     <div class="form-group advanced-input feature-group dropdown" style="border-top:none;display:none;">
                         <span class="filter subject"><label>Filter:</label> <span id="matches2"></span></span>
                         <input class="form-control feature-subject" id="feature-subject" name="feature-subject" type="text" placeholder="Filter by Feature Subject">
-                        <button id="feature2a-reset" class="feature-reset"><i class="icon"></i></button>
+                        <button id="feature2a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-subject">
                             <div class="tree-wrap">
@@ -93,7 +93,7 @@
 
                                 <div class="feature-submit">
                                     <button type="button" id="feature2-select" class="btn btn-default">Select</button>
-                                    <button type="reset" id="feature2b-reset" class="btn btn-default clear-form">Cancel<i class="icon"></i></button>
+                                    <button type="reset" id="feature2b-reset" class="btn btn-default clear-form">Cancel<span class="icon"></span></button>
                                 </div>
 
                             </div>
@@ -105,7 +105,7 @@
                     <div class="form-group advanced-input feature-group dropdown" style="border-top:none;display:none;">
                         <span class="filter region"><label>Filter:</label> <span id="matches3"></span></span>
                         <input class="form-control feature-region" id="feature-region" name="feature-region" type="text" placeholder="Filter by Feature Region">
-                        <button id="feature3a-reset" class="feature-reset"><i class="icon"></i></button>
+                        <button id="feature3a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-region">
                             <div class="tree-wrap">
@@ -116,7 +116,7 @@
 
                                 <div class="feature-submit">
                                     <button type="button" id="feature3-select" class="btn btn-default">Select</button>
-                                    <button type="reset" id="feature3b-reset" class="btn btn-default clear-form">Cancel<i class="icon"></i></button>
+                                    <button type="reset" id="feature3b-reset" class="btn btn-default clear-form">Cancel<span class="icon"></span></button>
                                 </div>
 
                             </div>
@@ -148,8 +148,8 @@
     <!-- BEGIN view section -->
     <section class="view-section">
         <ul class="nav nav-tabs">
-            <li class="treeview active"><a href=".treeview" data-toggle="tab"><i class="icon shanticon-tree"></i>Tree</a></li>
-            <li class="listview"><a href=".listview" data-toggle="tab"><i class="icon shanticon-list"></i>List</a></li>
+            <li class="treeview active"><a href=".treeview" data-toggle="tab"><span class="icon shanticon-tree"></span>Tree</a></li>
+            <li class="listview"><a href=".listview" data-toggle="tab"><span class="icon shanticon-list"></span>List</a></li>
         </ul>
         <div class="tab-content">
             <!-- TAB - tree view -->
