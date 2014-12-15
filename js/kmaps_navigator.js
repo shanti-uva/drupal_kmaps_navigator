@@ -260,7 +260,8 @@ jQuery(function ($) {
                 }
             );
             jQuery(elem).on('shown.bs.popover', function populateCounts(x) {
-                $(".popover").addClass("search-popup"); // target css styles on search tree popups
+                $("body > .popover").removeClass("related-resources-popover"); // target css styles on search tree popups
+                $("body > .popover").addClass("search-popover"); // target css styles on search tree popups
                 var counts = $("#infowrap" + node.key + " .counts-display");
                 var txt = $('#searchform').val();
                 $('.popover-caption').highlight(txt, {element: 'mark'});
@@ -384,7 +385,7 @@ jQuery(function ($) {
                         placement: 'left',
                         delay: { hide: 5 },
                         container: 'body',
-                        "template": '<div class="popover search-popup" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+                        "template": '<div class="popover search-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
                     }
 
                     // '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
