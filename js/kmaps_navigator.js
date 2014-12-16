@@ -104,6 +104,7 @@ jQuery(function ($) {
             },
             renderNode: function (event, data) {
                 data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
+                decorateElementWithPopover(data.node.span, data.node);
                 return data;
             },
             glyph: {
@@ -141,13 +142,12 @@ jQuery(function ($) {
             focus: function (event, data) {
                 data.node.scrollIntoView(true);
             },
-            renderNode: function (event, data) {
-
-                //console.log("renderNode:  " + data.node.span);
-                //if (!data.node.isStatusNode) {
-                    decorateElementWithPopover(data.node.span, data.node);
-                //}
-            },
+            //renderNode: function (event, data) {
+            //
+            //    //console.log("renderNode:  " + data.node.span);
+            //    //if (!data.node.isStatusNode) {
+            //    //}
+            //},
             cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
             idPrefix: "kmaps1tree"
         });
@@ -238,6 +238,7 @@ jQuery(function ($) {
         if (jQuery(elem).popover) {
             jQuery(elem).attr('rel', 'popover');
             var txt = $('#searchform').val();
+            console.log("TEXT: " + txt);
             jQuery(elem).popover({
                     html: true,
                     content: function () {
