@@ -601,7 +601,6 @@ jQuery(function ($) {
     });
     $(kms).focusout(function () {
         $(kms).attr("placeholder", $(kms).data("holder"));
-        $(kms).attr("placeholder", $(kms).data("holder"));
         $("button.searchreset").hide();
 
         var str = "Enter Search...";
@@ -621,8 +620,9 @@ jQuery(function ($) {
         $("button.searchreset").hide();
         $(".alert").hide();
 //    console.log("clearFilter()");
+				searchUtil.clearSearch();
         $('#tree').fancytree("getTree").clearFilter();
-        searchUtil.clearSearch();
+        
     });
 
 
