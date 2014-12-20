@@ -66,7 +66,7 @@ jQuery(function ($) {
             theme: 'bootstrap',
             debugLevel: 0,
             // autoScroll: true,
-            autoScroll: true,
+            autoScroll: false,
             filter: {
                 mode: "hide",
                 leavesOnly: false
