@@ -2,8 +2,6 @@
  * Created by ys2n on 10/3/14.
  */
 
-console.log("OINK");
-
 jQuery(function ($) {
 
 
@@ -27,7 +25,7 @@ jQuery(function ($) {
                 my: 'center center',
                 at: 'center center',
                 of: '.overlay-mask'
-            })
+            });
         }
 
         // Act based on params
@@ -39,10 +37,6 @@ jQuery(function ($) {
         }
         return this;
     };
-
-
-
-    console.log("BEGIN");
 
     var Settings = {
         type: location.pathname.indexOf('subjects') !== -1 ? "subjects" : "places",
@@ -75,15 +69,19 @@ jQuery(function ($) {
                 leavesOnly: false
             },
             activate: function (event, data) {
-                console.log("activate " + data.node.key);
+                //console.log("activate " + data.node.key);
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 event.preventDefault();
                 if(Drupal.settings.mediabase.facets.indexOf(data.node.key) == -1) {
 									Drupal.settings.mediabase.facets.push(data.node.key);
 								}
 								var facets = Drupal.settings.mediabase.facets.join('::');
-                $('#tab-overview').load(Drupal.settings.basePath + 'services/facets/' + facets);
-              //}).trigger('navigate');
+                $('#tab-overview').load(Drupal.settings.basePath + 'services/facets/' + facets + '/nojs/',
+                	 function( response, status, xhr ) {
+                	 	 console.info('load complete!');
+        					 		if ( status != "error" ) { Drupal.attachBehaviors('#tab-overview'); }
+        					});
+              // }).trigger('navigate'); // WHERE DID THIS COME FROM? AM I (ndg) LEAVING SOMETHIGN OUT?
             },
             createNode: function (event, data) {
                 //if (!data.node.isStatusNode) {

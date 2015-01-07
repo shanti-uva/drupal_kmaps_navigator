@@ -99,7 +99,7 @@ function kmaps_navigator_theme() {
                 // block--my-module--my-module-block1.tpl.php
 
                 'variables' => array(
-                    'forums' => NULL, 'topics' => NULL, 'parents' => NULL
+                    'facet' => NULL,
                 ),
                 '#attached' => array(
                     'libraries_load' => array(

@@ -3,14 +3,11 @@
  * @file
  */
 ?>
-
-
-<?php error_log("Yo bang on the new template!  What to do now?"); ?>
-
 <section class="kmaps-search" role="search">
 	
     <!-- BEGIN view section -->
     <section class="view-section">
+    		<h4><?php print $facet; ?></h4>
         <ul class="nav nav-tabs">
             <li class="treeview active"><a href=".treeview" data-toggle="tab"><span class="icon shanticon-tree"></span>Tree</a></li>
         </ul>
