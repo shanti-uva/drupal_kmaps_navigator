@@ -58,11 +58,14 @@ jQuery(function ($) {
     const SEARCH_MIN_LENGTH = 2;
 
     $(function () {
-
-        $("#tree").fancytree({
+				$(".kmaps-tree").each(function() { 
+					id_attr = $(this).parents(".block-facetapi").attr('id'); 
+					block_id = id_attr.split('-').pop();
+					facet_json = Drupal.settings.mediabase.facetblocks[block_id];
+					$(this).fancytree({
             extensions: [ "filter", "glyph"],
             checkbox: false,
-            selectMode: 2,
+            selectMode: 3,
             theme: 'bootstrap',
             debugLevel: 0,
             // autoScroll: true,
@@ -72,28 +75,15 @@ jQuery(function ($) {
                 leavesOnly: false
             },
             activate: function (event, data) {
-                // console.log("activate " + data.node.key);
-
-
+                console.log("activate " + data.node.key);
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
                 event.preventDefault();
-
-                var listitem = $(".title-field[kid='" + data.node.key + "']");
-                $('.row_selected').removeClass('row_selected');
-                $(listitem).closest('tr').addClass('row_selected');
-                $('#ajax-id-' + data.node.key).trigger('navigate').once('ajax-id-' + data.node.key, function() {
-                    var base = $(this).attr('id');
-                    var argument = $(this).attr('argument');
-
-                    var element_settings = {
-                      url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs',
-                      event: 'navigate',
-                      progress: {
-                        type: 'throbber'
-                      }
-                    };
-                    Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
-                }).trigger('navigate');
+                if(Drupal.settings.mediabase.facets.indexOf(data.node.key) == -1) {
+									Drupal.settings.mediabase.facets.push(data.node.key);
+								}
+								var facets = Drupal.settings.mediabase.facets.join('::');
+                $('#tab-overview').load(Drupal.settings.basePath + 'services/facets/' + facets);
+              //}).trigger('navigate');
             },
             createNode: function (event, data) {
                 //if (!data.node.isStatusNode) {
@@ -104,7 +94,7 @@ jQuery(function ($) {
             },
             renderNode: function (event, data) {
                 data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
-                decorateElementWithPopover(data.node.span, data.node);
+                //decorateElementWithPopover(data.node.span, data.node);
                 return data;
             },
             glyph: {
@@ -123,22 +113,8 @@ jQuery(function ($) {
 //              loading: "icon-spinner icon-spin"
                 }
             },
-            source: {
-//          url: "/fancy_nested.json",
-                url: Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val(),
-                cache: false,
-                debugDelay: 1000,
-                timeout: 30000,
-                error: function (e) {
-                    notify.warn("networkerror", "Error retrieving tree from kmaps server.");
-                },
-                beforeSend: function () {
-                    maskSearchResults(true);
-                },
-                complete: function () {
-                    maskSearchResults(false);
-                }
-            },
+           source: jQuery.parseJSON(facet_json),
+           
             focus: function (event, data) {
                 data.node.scrollIntoView(true);
             },
@@ -151,6 +127,8 @@ jQuery(function ($) {
             cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
             idPrefix: "kmaps1tree"
         });
+				});
+       
 
         $('.advanced-link').click ( function () {
             $(this).toggleClass("show-advanced",'fast');
@@ -165,7 +143,7 @@ jQuery(function ($) {
             //alert("boo");
             console.log("triggering doSearch!");
             $("#searchform").trigger('doSearch');
-        })
+        });
 
 
         $('#searchform').attr('autocomplete', 'off'); // turn off browser autocomplete
