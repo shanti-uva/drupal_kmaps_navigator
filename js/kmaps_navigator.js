@@ -81,14 +81,12 @@ jQuery(function ($) {
                 //    decorateElementWithPopover(data.node.span, data.node);
                 //}
                var node = data.node;
-               var selclass = (node.isSelected()) ? " selected" : "";
-               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax' + selclass + '">' + node.title + ' (' + node.data.count + ')</a>';
+               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax">' + node.title + ' (' + node.data.count + ')</a>';
                return data;
             },
             renderNode: function (event, data) {
                var node = data.node;
-               var selclass = (node.isSelected()) ? " selected" : "";
-               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax' + selclass + '">' + node.title + ' (' + node.data.count + ')</a>';
+               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax">' + node.title + ' (' + node.data.count + ')</a>';
                return data;
             },
             glyph: {
@@ -109,7 +107,7 @@ jQuery(function ($) {
             },
            
             focus: function (event, data) {
-            		data.node.setSelected();
+            		//data.node.setSelected();
                 data.node.scrollIntoView(true);
                 Drupal.attachBehaviors($('.kmaps-tree'));
             },
