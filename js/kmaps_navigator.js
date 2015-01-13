@@ -52,10 +52,12 @@ jQuery(function ($) {
     const SEARCH_MIN_LENGTH = 2;
 
     $(function () {
+    		var ct = 0;
 				$(".kmaps-tree").each(function() { 
-					id_attr = $(this).parents(".block-facetapi").attr('id'); 
-					block_id = id_attr.split('-').pop();
-					facet_json = Drupal.settings.mediabase.facetblocks[block_id];
+					ct++;
+					var id_attr = $(this).parents(".block-facetapi").attr('id'); 
+					var block_id = id_attr.split('-').pop();
+					var facet_json = Drupal.settings.mediabase.facetblocks[block_id];
 					$(this).fancytree({
             extensions: [ "filter", "glyph"],
             checkbox: false,
@@ -63,37 +65,31 @@ jQuery(function ($) {
             theme: 'bootstrap',
             debugLevel: 0,
             // autoScroll: true,
+            icons: false,
+            generateIds: true,
             autoScroll: false,
             filter: {
                 mode: "hide",
                 leavesOnly: false
             },
+            
             activate: function (event, data) {
-                //console.log("activate " + data.node.key);
-                // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
-                event.preventDefault();
-                if(Drupal.settings.mediabase.facets.indexOf(data.node.key) == -1) {
-									Drupal.settings.mediabase.facets.push(data.node.key);
-								}
-								var facets = Drupal.settings.mediabase.facets.join('::');
-                $('#tab-overview').load(Drupal.settings.basePath + 'services/facets/' + facets + '/nojs/',
-                	 function( response, status, xhr ) {
-                	 	 console.info('load complete!');
-        					 		if ( status != "error" ) { Drupal.attachBehaviors('#tab-overview'); }
-        					});
-              // }).trigger('navigate'); // WHERE DID THIS COME FROM? AM I (ndg) LEAVING SOMETHIGN OUT?
+              console.log('in activate: ', data);
             },
             createNode: function (event, data) {
                 //if (!data.node.isStatusNode) {
                 //    decorateElementWithPopover(data.node.span, data.node);
                 //}
-                data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
-                return data;
+               var node = data.node;
+               var selclass = (node.isSelected()) ? " selected" : "";
+               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax' + selclass + '">' + node.title + ' (' + node.data.count + ')</a>';
+               return data;
             },
             renderNode: function (event, data) {
-                data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
-                //decorateElementWithPopover(data.node.span, data.node);
-                return data;
+               var node = data.node;
+               var selclass = (node.isSelected()) ? " selected" : "";
+               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax' + selclass + '">' + node.title + ' (' + node.data.count + ')</a>';
+               return data;
             },
             glyph: {
                 map: {
@@ -111,20 +107,15 @@ jQuery(function ($) {
 //              loading: "icon-spinner icon-spin"
                 }
             },
-           source: jQuery.parseJSON(facet_json),
            
             focus: function (event, data) {
+            		data.node.setSelected();
                 data.node.scrollIntoView(true);
+                Drupal.attachBehaviors($('.kmaps-tree'));
             },
-            //renderNode: function (event, data) {
-            //
-            //    //console.log("renderNode:  " + data.node.span);
-            //    //if (!data.node.isStatusNode) {
-            //    //}
-            //},
-            cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
-            idPrefix: "kmaps1tree"
-        });
+            cookieId: "kmaps" + ct + "tree", // set cookies for search-browse tree, the first fancytree loaded
+            idPrefix: "kmaps" + ct + "tree"
+        	});
 				});
        
 
