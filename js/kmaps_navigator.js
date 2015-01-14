@@ -53,7 +53,7 @@ jQuery(function ($) {
 
     $(function () {
     		var ct = 0;
-				$(".kmaps-tree").each(function() { 
+				$(".kmaps-tree .content").each(function() { 
 					ct++;
 					var id_attr = $(this).parents(".block-facetapi").attr('id'); 
 					var block_id = id_attr.split('-').pop();
@@ -300,7 +300,7 @@ jQuery(function ($) {
                 } else {
                     jQuery('<div id="' + warnid + '" class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + warnhtml + '</div>').fadeIn().appendTo('#notification-wrapper');
                 }
-            }
+            };
 
             if ($('#notification-wrapper div#' + warnid).length) {
                 $('#notification-wrapper div#' + warnid).fadeOut('slow', wonk);
@@ -312,12 +312,12 @@ jQuery(function ($) {
         clear: function (warnid) {
 
             if (warnid) {
-                $('#notification-wrapper div#' + warnid).fadeOut('slow').remove()
+                $('#notification-wrapper div#' + warnid).fadeOut('slow').remove();
             } else {
-                $('#notification-wrapper div').fadeOut('slow').remove()
+                $('#notification-wrapper div').fadeOut('slow').remove();
             }
         }
-    }
+    };
 
     // SOLR AJAX
     // Adding all the "widgets" to the manager and attaching them to dom elements.
