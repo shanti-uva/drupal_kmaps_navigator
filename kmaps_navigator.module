@@ -31,7 +31,7 @@ function _kmaps_navigator_block() {
  * Implements hook_block_info().
  */
 function kmaps_navigator_block_info() {
-    error_log("kmaps_navigator_block_info()");
+    //error_log("kmaps_navigator_block_info()");
     $blocks['kmaps_navigator_block'] = array(
         // The name that will appear in the block list.
         'info' => t('KMaps Navigator'),
