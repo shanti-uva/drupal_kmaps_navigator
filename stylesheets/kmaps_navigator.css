@@ -1,7 +1,2 @@
 
 /** For Mediabase Facets *//
-
-/* Place checkmark before selected facets */
-.fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-selected:before {
-	content: "\2713";
-}
