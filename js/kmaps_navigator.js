@@ -74,7 +74,7 @@ jQuery(function ($) {
             },
             
             activate: function (event, data) {
-              console.log('in activate: ', data);
+              //console.log('in activate: ', data);
             },
             createNode: function (event, data) {
                 //if (!data.node.isStatusNode) {
@@ -86,7 +86,22 @@ jQuery(function ($) {
             },
             renderNode: function (event, data) {
                var node = data.node;
-               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax">' + node.title + ' (' + node.data.count + ')</a>';
+            	 var fstr = Drupal.settings.mediabase.facets;
+            	 var inst = "Click to filter results by: " + node.title;
+            	 if (fstr.length > 0 && fstr.indexOf(':' + node.data.fid) > -1) {
+            	 	inst = "Click to remove filter by: " + node.title;
+            	 }
+            	 var current_facet = node.data.facet + ':' + node.data.fid;
+            	 if(fstr.indexOf(current_facet) > -1) {
+            	 		fstr = fstr.replace(current_facet, "");
+            	 		fstr = fstr.replace(new RegExp("^[\:]+"), "");
+            	 		fstr = fstr.replace(new RegExp("[\:]+$"), "");
+            	 		fstr = fstr.replace('::::','::');
+            	 } else {
+            	 		if(fstr && fstr != '') { fstr += '::'; }
+            	 		fstr += current_facet;
+            	 }
+               node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + fstr  + '/nojs" class="use-ajax" title="' + inst + '">' + node.title + ' (' + node.data.count + ')</a>';
                return data;
             },
             glyph: {
@@ -114,8 +129,9 @@ jQuery(function ($) {
             cookieId: "kmaps" + ct + "tree", // set cookies for search-browse tree, the first fancytree loaded
             idPrefix: "kmaps" + ct + "tree"
         	});
+        	// Expand root node of tree
+        	$(this).fancytree('getTree').getFirstChild().setExpanded(true);
 				});
-       
 
         $('.advanced-link').click ( function () {
             $(this).toggleClass("show-advanced",'fast');
