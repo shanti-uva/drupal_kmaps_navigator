@@ -53,9 +53,9 @@ function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
     error_log("loading navigator: " . print_r(drupal_add_js(drupal_get_path('module', 'kmaps_navigator') . "/js/kmaps_navigator.js",array(
             'group' => JS_THEME,
         )),true));
-    drupal_add_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js",array('type' => 'external'));
-    drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css",array('type' => 'external'));
-    drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",array('type' => 'external'));
+    // drupal_add_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js",array('type' => 'external'));
+    // drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css",array('type' => 'external'));
+    // drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",array('type' => 'external'));
 
     //Add Ajax library
     drupal_add_library('system', 'drupal.ajax');
