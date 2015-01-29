@@ -40,8 +40,6 @@ jQuery(function ($) {
         return this;
     };
 
-
-
     console.log("BEGIN");
 
     var Settings = {
@@ -355,7 +353,6 @@ jQuery(function ($) {
             }
         }
     }
-
     // SOLR AJAX
     // Adding all the "widgets" to the manager and attaching them to dom elements.
 
@@ -591,40 +588,40 @@ jQuery(function ($) {
     });
 
 
+    $(function() {
+        var kms = $("#searchform"); // the main search input
+        $(kms).data("holder", $(kms).attr("placeholder"));
 
-
-    var kms = $("#searchform"); // the main search input
-    $(kms).data("holder", $(kms).attr("placeholder"));
-
-    // --- features inputs - focusin / focusout
-    $(kms).focusin(function () {
-        $(kms).attr("placeholder", "");
-        $("button.searchreset").show("fast");
-    });
-    $(kms).focusout(function () {
-        $(kms).attr("placeholder", $(kms).data("holder"));
-        $("button.searchreset").hide();
-
-        var str = "Enter Search...";
-        var txt = $(kms).val();
-
-        if (str.indexOf(txt) > -1) {
+        // --- features inputs - focusin / focusout
+        $(kms).focusin(function () {
+            $(kms).attr("placeholder", "");
+            $("button.searchreset").show("fast");
+        });
+        $(kms).focusout(function () {
+            $(kms).attr("placeholder", $(kms).data("holder"));
             $("button.searchreset").hide();
-            return true;
-        } else {
-            $("button.searchreset").show(100);
-            return false;
-        }
-    });
-    // --- close and clear all
-    $("button.searchreset").click(function () {
-        $(kms).attr("placeholder", $(kms).data("holder"));
-        $("button.searchreset").hide();
-        $(".alert").hide();
-//    console.log("clearFilter()");
-				searchUtil.clearSearch();
-        $('#tree').fancytree("getTree").clearFilter();
-        
+
+            var str = "Enter Search...";
+            var txt = $(kms).val();
+
+            if (str.indexOf(txt) > -1) {
+                $("button.searchreset").hide();
+                return true;
+            } else {
+                $("button.searchreset").show(100);
+                return false;
+            }
+        });
+        // --- close and clear all
+        $("button.searchreset").click(function () {
+            $(kms).attr("placeholder", $(kms).data("holder"));
+            $("button.searchreset").hide();
+            $(".alert").hide();
+    //    console.log("clearFilter()");
+           searchUtil.clearSearch();
+            $('#tree').fancytree("getTree").clearFilter();
+
+        });
     });
 
 
