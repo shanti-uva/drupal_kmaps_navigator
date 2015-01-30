@@ -84,9 +84,12 @@ jQuery(function ($) {
                 $('#ajax-id-' + data.node.key).trigger('navigate').once('ajax-id-' + data.node.key, function() {
                     var base = $(this).attr('id');
                     var argument = $(this).attr('argument');
+                    var url = location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
+
+                    window.history.pushState(null, null, url);
 
                     var element_settings = {
-                      url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs',
+                      url: url,
                       event: 'navigate',
                       progress: {
                         type: 'throbber'
@@ -622,7 +625,7 @@ jQuery(function ($) {
 //    console.log("clearFilter()");
 				searchUtil.clearSearch();
         $('#tree').fancytree("getTree").clearFilter();
-        
+
     });
 
 
