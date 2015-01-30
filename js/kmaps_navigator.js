@@ -40,16 +40,14 @@ jQuery(function ($) {
         return this;
     };
 
-
-
     console.log("BEGIN");
 
     var Settings = {
         type: location.pathname.indexOf('subjects') !== -1 ? "subjects" : "places",
-        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://subjects.kmaps.virginia.edu" : "http://places.kmaps.virginia.edu",
+        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://dev-subjects.kmaps.virginia.edu" : "http://dev-places.kmaps.virginia.edu",
         mmsUrl: "http://mms.thlib.org",
-        placesUrl: "http://places.kmaps.virginia.edu",
-        subjectsUrl: "http://subjects.kmaps.virginia.edu",
+        placesUrl: "http://dev-places.kmaps.virginia.edu",
+        subjectsUrl: "http://dev-subjects.kmaps.virginia.edu",
         placesPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/places',
         subjectsPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/subjects',
         mediabaseURL: "http://mediabase.drupal-dev.shanti.virginia.edu"
@@ -76,6 +74,8 @@ jQuery(function ($) {
 
 
                 // TODO: CHANGE THIS TO A CONFIGURABLE CALLBACK
+
+
                 event.preventDefault();
 
                 var listitem = $(".title-field[kid='" + data.node.key + "']");
@@ -102,11 +102,11 @@ jQuery(function ($) {
                 //if (!data.node.isStatusNode) {
                 //    decorateElementWithPopover(data.node.span, data.node);
                 //}
-                data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
+                data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
                 return data;
             },
             renderNode: function (event, data) {
-                data.node.span.childNodes[2].innerHTML = '<div id="ajax-id-' + data.node.key + '">' + data.node.title + '</div>';
+                data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
                 decorateElementWithPopover(data.node.span, data.node);
                 return data;
             },
@@ -356,7 +356,6 @@ jQuery(function ($) {
             }
         }
     }
-
     // SOLR AJAX
     // Adding all the "widgets" to the manager and attaching them to dom elements.
 
@@ -592,40 +591,40 @@ jQuery(function ($) {
     });
 
 
+    $(function() {
+        var kms = $("#searchform"); // the main search input
+        $(kms).data("holder", $(kms).attr("placeholder"));
 
-
-    var kms = $("#searchform"); // the main search input
-    $(kms).data("holder", $(kms).attr("placeholder"));
-
-    // --- features inputs - focusin / focusout
-    $(kms).focusin(function () {
-        $(kms).attr("placeholder", "");
-        $("button.searchreset").show("fast");
-    });
-    $(kms).focusout(function () {
-        $(kms).attr("placeholder", $(kms).data("holder"));
-        $("button.searchreset").hide();
-
-        var str = "Enter Search...";
-        var txt = $(kms).val();
-
-        if (str.indexOf(txt) > -1) {
+        // --- features inputs - focusin / focusout
+        $(kms).focusin(function () {
+            $(kms).attr("placeholder", "");
+            $("button.searchreset").show("fast");
+        });
+        $(kms).focusout(function () {
+            $(kms).attr("placeholder", $(kms).data("holder"));
             $("button.searchreset").hide();
-            return true;
-        } else {
-            $("button.searchreset").show(100);
-            return false;
-        }
-    });
-    // --- close and clear all
-    $("button.searchreset").click(function () {
-        $(kms).attr("placeholder", $(kms).data("holder"));
-        $("button.searchreset").hide();
-        $(".alert").hide();
-//    console.log("clearFilter()");
-				searchUtil.clearSearch();
-        $('#tree').fancytree("getTree").clearFilter();
 
+            var str = "Enter Search...";
+            var txt = $(kms).val();
+
+            if (str.indexOf(txt) > -1) {
+                $("button.searchreset").hide();
+                return true;
+            } else {
+                $("button.searchreset").show(100);
+                return false;
+            }
+        });
+        // --- close and clear all
+        $("button.searchreset").click(function () {
+            $(kms).attr("placeholder", $(kms).data("holder"));
+            $("button.searchreset").hide();
+            $(".alert").hide();
+    //    console.log("clearFilter()");
+           searchUtil.clearSearch();
+            $('#tree').fancytree("getTree").clearFilter();
+
+        });
     });
 
 
