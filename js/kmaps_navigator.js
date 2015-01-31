@@ -86,7 +86,7 @@ jQuery(function ($) {
                     var argument = $(this).attr('argument');
                     var url = location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
 
-                    window.history.pushState(null, null, url);
+                    window.history.pushState({tag: true}, null, url);
 
                     var element_settings = {
                       url: url,
