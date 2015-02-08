@@ -44,13 +44,13 @@ jQuery(function ($) {
 
     var Settings = {
         type: location.pathname.indexOf('subjects') !== -1 ? "subjects" : "places",
-        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://dev-subjects.kmaps.virginia.edu" : "http://dev-places.kmaps.virginia.edu",
+        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://subjects.kmaps.virginia.edu" : "http://places.kmaps.virginia.edu",
         mmsUrl: "http://mms.thlib.org",
-        placesUrl: "http://dev-places.kmaps.virginia.edu",
-        subjectsUrl: "http://dev-subjects.kmaps.virginia.edu",
+        placesUrl: "http://places.kmaps.virginia.edu",
+        subjectsUrl: "http://subjects.kmaps.virginia.edu",
         placesPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/places',
         subjectsPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/subjects',
-        mediabaseURL: "http://mediabase.drupal-dev.shanti.virginia.edu"
+        mediabaseURL: "http://mediabase.drupal-test.shanti.virginia.edu"
     };
     // search min length
     const SEARCH_MIN_LENGTH = 2;
