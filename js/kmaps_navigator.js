@@ -84,7 +84,7 @@ jQuery(function ($) {
                 $('#ajax-id-' + data.node.key).trigger('navigate').once('ajax-id-' + data.node.key, function() {
                     var base = $(this).attr('id');
                     var argument = $(this).attr('argument');
-                    var url = location.origin + location.pathname.substring(0, location.pathname.lastIndexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
+                    var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
 
                     window.history.pushState({tag: true}, null, url);
 
