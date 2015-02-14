@@ -263,6 +263,7 @@ jQuery(function ($) {
 
                 }
             );
+
             jQuery(elem).on('shown.bs.popover', function populateCounts(x) {
                 $("body > .popover").removeClass("related-resources-popover"); // target css styles on search tree popups
                 $("body > .popover").addClass("search-popover"); // target css styles on search tree popups
@@ -294,13 +295,82 @@ jQuery(function ($) {
                         if (video_count) counts.append("<span class='associated'><i class='icon shanticon-audio-video'></i><span class='badge' + (video_count)?' alert-success':'>" + video_count + "</span></span>");
                         if (picture_count) counts.append("<span class='associated'><i class='icon shanticon-photos'></i><span class='badge' + (picture_count)?' alert-success':'>" + picture_count + "</span></span>");
                         if (place_count) counts.append("<span class='associated'><i class='icon shanticon-places'></i><span class='badge' + (place_count)?' alert-success':'>" + place_count + "</span></span>");
-                        if (description_count) counts.append("<span class='associated'><i class='icon shanticon-essays'></i><span class='badge' + (description_count)?' alert-success':'>" + description_count + "</span></span>");
+                        if (description_count) counts.append("<span class='associated'><i class='icon shanticon-texts'></i><span class='badge' + (description_count)?' alert-success':'>" + description_count + "</span></span>");
                         if (related_count) counts.append("<span class='associated'><i class='icon shanticon-" + Settings.type + "'></i><span class='badge' + (related_count)?' alert-success':''>" + related_count + "</span></span>");
 
+                    },
+                    complete: function() {
+                        var solrURL = 'http://kidx.shanti.virginia.edu/solr/kmindex/select?q=kmapid:' + Settings.type + '-' + node.key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                        $.get(solrURL, function (json) {
+                            // console.dir(json);
+
+
+                            var updates = {};
+                            var data = JSON.parse(json);
+                            $.each(data.grouped.asset_type.groups, function (x, y) {
+                                var asset_type = y.groupValue;
+                                var asset_count = y.doclist.numFound;
+                                updates[asset_type]=asset_count;
+                            });
+
+                            console.log(node.key + "(" + node.title + ") : " + JSON.stringify(updates));
+                            update_counts(counts,updates)
+                        });
                     }
                 });
             });
         }
+
+
+
+        function update_counts(elem, counts) {
+
+            if (typeof(counts.videos) != "undefined") {
+                var av = elem.find('i.shanticon-audio-video ~ span.badge');
+                (counts.videos) ? av.html(counts.videos).parent().show() : av.parent().hide();
+            }
+
+            if (typeof(counts["audio-video"]) != "undefined") {
+                var av = elem.find('i.shanticon-audio-video ~ span.badge');
+                (counts["audio-video"]) ? av.html(counts["audio-video"]).parent().show() : av.parent().hide();
+
+                console.log("AUDIO-VIDEO count: " + counts["audio-video"]);
+
+            }
+
+            if (typeof(counts["audio"]) != "undefined") {
+                var av = elem.find('i.shanticon-audio-video ~ span.badge');
+                (counts.videos) ? av.html(counts.videos).parent().show() : av.parent().hide();
+            }
+
+
+            if (typeof(counts.photos) != "undefined") {
+                var photos = elem.find('i.shanticon-photos ~ span.badge');
+                (counts.photos) ? photos.html(counts.photos).parent().show() : photos.parent().hide();
+            }
+
+            if (typeof(counts.places) != "undefined") {
+                var places = elem.find('i.shanticon-places ~ span.badge');
+                (counts.places) ? places.html(counts.places).parent().show() : places.parent().hide();
+            }
+
+            if (typeof(counts.texts) != "undefined") {
+                var essays = elem.find('i.shanticon-texts ~ span.badge');
+                (counts["texts"]) ? essays.html(counts["texts"]).parent().show() : essays.parent().hide();
+                console.log("TEXTS count: " + counts["texts"]);
+
+            }
+
+            if (typeof(counts.subjects) != "undefined") {
+                var subjects = elem.find('i.shanticon-subjects ~ span.badge');
+                (counts.subjects) ? subjects.html(counts.subjects).parent().show() : subjects.parent().hide();
+            }
+
+            elem.find('.assoc-resources-loading').hide();
+        }
+
+
+
         return elem;
     };
 
@@ -443,7 +513,7 @@ jQuery(function ($) {
                     "<span style='display: none;' class='associated'><i class='icon shanticon-audio-video'></i><span class='badge alert-success'>0</span></span>" +
                     "<span style='display: none;' class='associated'><i class='icon shanticon-photos'></i><span class='badge alert-success'>0</span></span>" +
                     "<span style='display: none;' class='associated'><i class='icon shanticon-places'></i><span class='badge alert-success'>0</span></span>" +
-                    "<span style='display: none;' class='associated'><i class='icon shanticon-essays'></i><span class='badge alert-success'>0</span></span>" +
+                    "<span style='display: none;' class='associated'><i class='icon shanticon-texts'></i><span class='badge alert-success'>0</span></span>" +
                     "<span style='display: none;' class='associated'><i class='icon shanticon-subjects'></i><span class='badge alert-success'>0</span></span>" +
                     "</div>";
                 var content = path + caption + "<div class='info-wrap' id='infowrap" + localid + "'>" + lazycounts + "</div>";
@@ -513,8 +583,8 @@ jQuery(function ($) {
             $.get(solrURL, function (json) {
                 var data = JSON.parse(json);
                 $.each(data.grouped.service.groups, function (x, y) {
-//                   console.log("groupValue: " + y.groupValue);
-//                    console.log("numFound: " + y.doclist.numfound);
+                   console.log("groupValue: " + y.groupValue);
+                    console.log("numFound: " + y.doclist.numFound);
                 });
             });
 
@@ -576,7 +646,7 @@ jQuery(function ($) {
                 }
 
                 if (typeof(counts.essays) != "undefined") {
-                    var essays = elem.find('i.shanticon-essays ~ span.badge');
+                    var essays = elem.find('i.shanticon-texts ~ span.badge');
                     (counts.essays) ? essays.html(counts.essays).parent().show : essays.parent().hide();
                 }
 
