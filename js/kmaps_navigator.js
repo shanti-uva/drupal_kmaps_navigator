@@ -290,12 +290,15 @@ jQuery(function ($) {
                         var picture_count = Number($(xml).find('picture_count').text());
                         var video_count = Number($(xml).find('video_count').text());
                         var document_count = Number($(xml).find('document_count').text());
+                        var subject_count = Number($(xml).find('subject_count').text());
+
 
                         counts.html("");
                         if (video_count) counts.append("<span class='associated'><i class='icon shanticon-audio-video'></i><span class='badge' + (video_count)?' alert-success':'>" + video_count + "</span></span>");
                         if (picture_count) counts.append("<span class='associated'><i class='icon shanticon-photos'></i><span class='badge' + (picture_count)?' alert-success':'>" + picture_count + "</span></span>");
                         if (place_count) counts.append("<span class='associated'><i class='icon shanticon-places'></i><span class='badge' + (place_count)?' alert-success':'>" + place_count + "</span></span>");
-                        if (description_count) counts.append("<span class='associated'><i class='icon shanticon-texts'></i><span class='badge' + (description_count)?' alert-success':'>" + description_count + "</span></span>");
+                        if (subject_count) counts.append("<span class='associated'><i class='icon shanticon-subjects'></i><span class='badge' + (subject_count)?' alert-success':'>" + subject_count + "</span></span>");
+                        if (description_count) counts.append("<span class='associated'><i class='icon shanticon-essays'></i><span class='badge' + (description_count)?' alert-success':'>" + description_count + "</span></span>");
                         if (related_count) counts.append("<span class='associated'><i class='icon shanticon-" + Settings.type + "'></i><span class='badge' + (related_count)?' alert-success':''>" + related_count + "</span></span>");
 
                     },
@@ -333,7 +336,6 @@ jQuery(function ($) {
             if (typeof(counts["audio-video"]) != "undefined") {
                 var av = elem.find('i.shanticon-audio-video ~ span.badge');
                 (counts["audio-video"]) ? av.html(counts["audio-video"]).parent().show() : av.parent().hide();
-
                 console.log("AUDIO-VIDEO count: " + counts["audio-video"]);
 
             }
@@ -354,8 +356,10 @@ jQuery(function ($) {
                 (counts.places) ? places.html(counts.places).parent().show() : places.parent().hide();
             }
 
+
+            // TODO:  Why isn't this working?
             if (typeof(counts.texts) != "undefined") {
-                var essays = elem.find('i.shanticon-texts ~ span.badge');
+                var essays = elem.find('i.shanticon-essays ~ span.badge');
                 (counts["texts"]) ? essays.html(counts["texts"]).parent().show() : essays.parent().hide();
                 console.log("TEXTS count: " + counts["texts"]);
 
@@ -513,7 +517,7 @@ jQuery(function ($) {
                     "<span style='display: none;' class='associated'><i class='icon shanticon-audio-video'></i><span class='badge alert-success'>0</span></span>" +
                     "<span style='display: none;' class='associated'><i class='icon shanticon-photos'></i><span class='badge alert-success'>0</span></span>" +
                     "<span style='display: none;' class='associated'><i class='icon shanticon-places'></i><span class='badge alert-success'>0</span></span>" +
-                    "<span style='display: none;' class='associated'><i class='icon shanticon-texts'></i><span class='badge alert-success'>0</span></span>" +
+                    "<span style='display: none;' class='associated'><i class='icon shanticon-essays'></i><span class='badge alert-success'>0</span></span>" +
                     "<span style='display: none;' class='associated'><i class='icon shanticon-subjects'></i><span class='badge alert-success'>0</span></span>" +
                     "</div>";
                 var content = path + caption + "<div class='info-wrap' id='infowrap" + localid + "'>" + lazycounts + "</div>";
@@ -646,7 +650,7 @@ jQuery(function ($) {
                 }
 
                 if (typeof(counts.essays) != "undefined") {
-                    var essays = elem.find('i.shanticon-texts ~ span.badge');
+                    var essays = elem.find('i.shanticon-essays ~ span.badge');
                     (counts.essays) ? essays.html(counts.essays).parent().show : essays.parent().hide();
                 }
 
