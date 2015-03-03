@@ -46,13 +46,14 @@ jQuery(function ($) {
         subjectsUrl: "http://subjects.kmaps.virginia.edu",
         placesPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/places',
         subjectsPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/subjects',
-        mediabaseURL: "http://mediabase.drupal-dev.shanti.virginia.edu"
+        //mediabaseURL: "http://mediabase.drupal-dev.shanti.virginia.edu"
     };
     // search min length
     const SEARCH_MIN_LENGTH = 2;
 
     $(function () {
     		var ct = 0;
+    		Drupal.settings.mediabase.ftrees = [];
 				$(".kmaps-tree .content").each(function() { 
 					ct++;
 					var id_attr = $(this).parents(".block-facetapi").attr('id'); 
@@ -73,9 +74,6 @@ jQuery(function ($) {
                 leavesOnly: false
             },
             
-            activate: function (event, data) {
-              //console.log('in activate: ', data);
-            },
             createNode: function (event, data) {
                 //if (!data.node.isStatusNode) {
                 //    decorateElementWithPopover(data.node.span, data.node);
@@ -84,6 +82,7 @@ jQuery(function ($) {
                node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + node.data.facet + ':' + node.data.fid + '/nojs" class="use-ajax">' + node.title + ' (' + node.data.count + ')</a>';
                return data;
             },
+            
             renderNode: function (event, data) {
                var node = data.node;
             	 var fstr = Drupal.settings.mediabase.facets;
@@ -102,6 +101,7 @@ jQuery(function ($) {
             	 		fstr += current_facet;
             	 }
                node.span.childNodes[1].innerHTML = '<a href="/services/facets/' + fstr  + '/nojs" class="use-ajax" title="' + inst + '">' + node.title + ' (' + node.data.count + ')</a>';
+
                return data;
             },
             glyph: {
@@ -130,7 +130,9 @@ jQuery(function ($) {
             idPrefix: "kmaps" + ct + "tree"
         	});
         	// Expand root node of tree
-        	$(this).fancytree('getTree').getFirstChild().setExpanded(true);
+        	var mytree = $(this).fancytree('getTree');
+        	mytree.getFirstChild().setExpanded(true);
+        	Drupal.settings.mediabase.ftrees.push(mytree);
 				});
 
         $('.advanced-link').click ( function () {
@@ -198,7 +200,7 @@ jQuery(function ($) {
 
         $('#kmaps-search form').on('submit', function(event,target) { event.preventDefault(); });
 
-
+				
     });
 
     function maskSearchResults(isMasked) {
