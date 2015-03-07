@@ -43,13 +43,11 @@ jQuery(function ($) {
     console.log("BEGIN");
 
     var Settings = {
-        type: location.pathname.indexOf('subjects') !== -1 ? "subjects" : "places",
-        baseUrl: location.pathname.indexOf('subjects') !== -1 ? "http://subjects.kmaps.virginia.edu" : "http://places.kmaps.virginia.edu",
+        type: location.pathname.match(/subjects\/\d+\//i) ? "subjects" : "places",
+        baseUrl: location.pathname.match(/subjects\/\d+\//i) ? "http://subjects.kmaps.virginia.edu" : "http://places.kmaps.virginia.edu",
         mmsUrl: "http://mms.thlib.org",
         placesUrl: "http://places.kmaps.virginia.edu",
         subjectsUrl: "http://subjects.kmaps.virginia.edu",
-        placesPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/places',
-        subjectsPath: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf('/')) + '/subjects',
         mediabaseURL: "http://mediabase.drupal-test.shanti.virginia.edu"
     };
     // search min length
