@@ -286,7 +286,7 @@
                             kmidxBase = 'http://kidx.shanti.virginia.edu/solr/kmindex';
                             console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase );
                         }
-                        var solrURL = kmidxBase + '/select?q=kmapid:' + SETTINGS.TYPE + '-' + key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                        var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
                             $.get(solrURL, function (json) {
                                 var updates = {};
                                 var data = JSON.parse(json);
