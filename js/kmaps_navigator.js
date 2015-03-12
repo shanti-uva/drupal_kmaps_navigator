@@ -276,7 +276,17 @@
 
                         },
                         complete: function() {
-                            var solrURL = 'http://kidx.shanti.virginia.edu/solr/kmindex/select?q=kmapid:' + Settings.type + '-' + key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+
+                        console.log("HRUMPHPHPHP");
+                        console.dir(Drupal.settings);
+
+
+                        var kmidxBase = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr;
+                        if (!kmidxBase) {
+                            kmidxBase = 'http://kidx.shanti.virginia.edu/solr/kmindex';
+                            console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase );
+                        }
+                        var solrURL = kmidxBase + '/select?q=kmapid:' + SETTINGS.TYPE + '-' + key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
                             $.get(solrURL, function (json) {
                                 var updates = {};
                                 var data = JSON.parse(json);
@@ -461,8 +471,22 @@
                 }
             });
 
+
+        var termidx = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr_term;
+
+        if (!termidx) {
+            termidx = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr;
+            termidx = termidx.replace(/kmindex/,'termindex');
+        }
+
+        if (!termidx) {
+            termidx = 'http://kidx.shanti.virginia.edu/solr/termindex-dev';
+        }
+
+        console.log(" USING: " + termidx);
+
             Manager = new AjaxSolr.Manager({
-                solrUrl: 'http://kidx.shanti.virginia.edu/solr/termindex/'
+            solrUrl: termidx + "/"
             });
 
             // alert("adding widget!");
