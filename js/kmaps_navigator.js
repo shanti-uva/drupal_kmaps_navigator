@@ -38,11 +38,12 @@
             return this;
         };
 
-        console.log("BEGIN");
+        //console.log("BEGIN");
 
+        var theType = (Drupal.settings.kmaps_explorer)? Drupal.settings.kmaps_explorer.app:"places";
         var Settings = {
-            type: Drupal.settings.kmaps_explorer.app,
-            baseUrl: 'http://' + Drupal.settings.kmaps_explorer.app + '.kmaps.virginia.edu',
+            type: theType,
+            baseUrl: 'http://' + theType + '.kmaps.virginia.edu',
             mmsUrl: "http://mms.thlib.org",
             placesUrl: "http://places.kmaps.virginia.edu",
             subjectsUrl: "http://subjects.kmaps.virginia.edu",
@@ -66,6 +67,7 @@
                     leavesOnly: false
                 },
                 activate: function (event, data) {
+                    Settings.type = (Drupal.settings.kmaps_explorer)? Drupal.settings.kmaps_explorer.app:"places";
                     event.preventDefault();
                     var listitem = $(".title-field[kid='" + data.node.key + "']");
                     $('.row_selected').removeClass('row_selected');
@@ -147,7 +149,7 @@
             });
 
             $("#searchbutton").on('click',function() {
-                console.log("triggering doSearch!");
+                // console.log("triggering doSearch!");
                 $("#searchform").trigger('doSearch');
             })
 
@@ -253,6 +255,8 @@
                             countsElem.html("<i class='glyphicon glyphicon-warning-sign' title='" + e.statusText);
                         },
                         success: function (xml) {
+                            Settings.type = (Drupal.settings.kmaps_explorer)? Drupal.settings.kmaps_explorer.app:"places";
+
                             // force the counts to be evaluated as numbers.
                             var related_count = Number($(xml).find('related_feature_count').text());
                             var description_count = Number($(xml).find('description_count').text());
@@ -277,8 +281,9 @@
                         },
                         complete: function() {
 
-                        console.log("HRUMPHPHPHP");
-                        console.dir(Drupal.settings);
+                        // console.log("HRUMPHPHPHP");
+                        // console.dir(Drupal.settings);
+                        // console.dir(Drupal.settings);
 
 
                         var kmidxBase = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr;
@@ -295,7 +300,7 @@
                                     var asset_count = y.doclist.numFound;
                                     updates[asset_type]=asset_count;
                                 });
-                                console.log(key + "(" + title + ") : " + JSON.stringify(updates));
+                                // console.log(key + "(" + title + ") : " + JSON.stringify(updates));
                                 update_counts(countsElem,updates)
                             });
                         }
@@ -483,7 +488,7 @@
             termidx = 'http://kidx.shanti.virginia.edu/solr/termindex-dev';
         }
 
-        console.log(" USING: " + termidx);
+            Settings.type = (Drupal.settings.kmaps_explorer)? Drupal.settings.kmaps_explorer.app:"places";
 
             Manager = new AjaxSolr.Manager({
             solrUrl: termidx + "/"
