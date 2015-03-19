@@ -61,7 +61,7 @@
                 checkbox: false,
                 selectMode: 2,
                 theme: 'bootstrap',
-                debugLevel: 0,
+                debugLevel: 12,
                 // autoScroll: true,
                 autoScroll: false,
                 filter: {
@@ -69,40 +69,64 @@
                     leavesOnly: false
                 },
                 activate: function (event, data) {
+
+                    //console.log("ACTIVATE:");
+                    //console.dir(data);
+
                     Settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
                     event.preventDefault();
                     var listitem = $(".title-field[kid='" + data.node.key + "']");
                     $('.row_selected').removeClass('row_selected');
                     $(listitem).closest('tr').addClass('row_selected');
-                    $('#ajax-id-' + data.node.key).trigger('navigate');
+
+                    var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
+
                 },
                 createNode: function (event, data) {
+                    //console.log("createNode: " + data.node.span)
+                    //console.dir(data);
                     data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
                     return data;
                 },
                 renderNode: function (event, data) {
-                    // console.log("renderNode: " + data.node.span);
-                    data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
-                    var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
-                        return x.title;
-                    })).join("/");
+                    //console.log("renderNode: " + $(data.node.span).val());
+                    //console.dir(data);
+                    //
+                    //console.log("Status Node? " + data.node.isStatusNode());
+                    //console.log("Loading? " + data.node.isLoading());
 
-                    decorateElementWithPopover(data.node.span, data.node.key, path, data.node.title, data.node.data.caption);
+                    //console.log(JSON.stringify(event) + ": " + data.node.statusNodeType);
 
-                    $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
-                        var base = $(this).attr('id');
-                        var argument = $(this).attr('argument');
-                        var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
-                        window.history.pushState({tag: true}, null, url);
-                        var element_settings = {
-                            url: url,
-                            event: 'navigate',
-                            progress: {
-                                type: 'throbber'
-                            }
-                        };
-                        Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
-                    });
+
+                    if (!data.node.isStatusNode()) {
+
+                        //console.log("STATUS NODE: " + data.node.isStatusNode());
+                        data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
+                        var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
+                            return x.title;
+                        })).join("/");
+
+
+                        decorateElementWithPopover(data.node.span, data.node.key, path, data.node.title, data.node.data.caption);
+                        $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
+                            var base = $(this).attr('id');
+                            var argument = $(this).attr('argument');
+                            var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
+
+                            var element_settings = {
+                                url: url,
+                                event: 'click',
+                                progress: {
+                                    type: 'throbber'
+                                }
+                            };
+                            Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
+                            //this.click(function () {
+                            //    console.log("pushing state for " + url);
+                            //    window.history.pushState({tag: true}, null, url);
+                            //});
+                        });
+                    }
                     return data;
                 },
                 glyph: {
@@ -128,7 +152,7 @@
                     debugDelay: 1000,
                     timeout: 30000,
                     error: function (e) {
-                        notify.warn("networkerror", "Error retrieving tree from kmaps server.");
+                        notify.warn("networkerror", "Error retrieving tree from kmaps server. Error: " + e.message);
                     },
                     beforeSend: function () {
                         maskSearchResults(true);
@@ -187,22 +211,6 @@
                     if (activeNode) {
                         activeNode.makeVisible();
                     }
-                });
-
-                // If there is a error node in fancytree.  Then you can click it to retry.
-                $('#tree').on('click', '.fancytree-statusnode-error', function () {
-                    $('#tree').fancytree();
-                });
-
-                // iCheck fixup -- added by gketuma
-                $('nav li.form-group input[name=option2]').on('ifChecked', function (e) {
-                    var newSource = Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val();
-                    $("#tree").fancytree("option", "source.url", newSource);
-                });
-
-                // kludge, to prevent regular form submission.
-                $('#kmaps-search form').on('submit', function (event, target) {
-                    event.preventDefault();
                 });
 
             });
@@ -586,6 +594,22 @@
                 searchUtil.clearSearch();
                 $('#tree').fancytree("getTree").clearFilter();
 
+            });
+            // If there is a error node in fancytree.  Then you can click it to retry.
+            $('#tree').on('click', '.fancytree-statusnode-error', function () {
+                $('#tree').fancytree();
+            });
+
+            // iCheck fixup -- added by gketuma
+            $('nav li.form-group input[name=option2]').on('ifChecked', function (e) {
+                var newSource = Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val();
+                $("#tree").fancytree("option", "source.url", newSource);
+            });
+
+            // kludge, to prevent regular form submission.
+            $('#kmaps-search form').on('submit', function (event, target) {
+                event.preventDefault();
+                return false;
             });
         }); // end of once
     }//end of attach
