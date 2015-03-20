@@ -61,7 +61,7 @@
                 checkbox: false,
                 selectMode: 2,
                 theme: 'bootstrap',
-                debugLevel: 12,
+                debugLevel: 1,
                 // autoScroll: true,
                 autoScroll: false,
                 filter: {
@@ -74,13 +74,13 @@
                     //console.dir(data);
 
                     Settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
-                    event.preventDefault();
+                    // event.preventDefault();
                     var listitem = $(".title-field[kid='" + data.node.key + "']");
                     $('.row_selected').removeClass('row_selected');
                     $(listitem).closest('tr').addClass('row_selected');
 
                     var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
-
+                    $(data.node.span).find('#ajax-id-' + data.node.key).trigger('navigate');
                 },
                 createNode: function (event, data) {
                     //console.log("createNode: " + data.node.span)
@@ -115,7 +115,7 @@
 
                             var element_settings = {
                                 url: url,
-                                event: 'click',
+                                event: 'navigate',
                                 progress: {
                                     type: 'throbber'
                                 }
@@ -205,15 +205,16 @@
                 }
                 //});
 
-                // Run when switching to tree view
-                $('.treeview').on('shown.bs.tab', function () {
-                    var activeNode = $('#tree').fancytree("getTree").getActiveNode();
-                    if (activeNode) {
-                        activeNode.makeVisible();
-                    }
-                });
-
             });
+
+            // Run when switching to tree view
+            $('.treeview').on('shown.bs.tab', function () {
+                var activeNode = $('#tree').fancytree("getTree").getActiveNode();
+                if (activeNode) {
+                    activeNode.makeVisible();
+                }
+            });
+
 
             function maskSearchResults(isMasked) {
                 var showhide = (isMasked) ? 'show' : 'hide';
@@ -454,6 +455,7 @@
                             $(event.target).closest('tr').addClass('row_selected');
                             $("#tree").animate({scrollTop: 0}, "slow");
                             $("#tree").fancytree('getTree').activateKey(kid);
+                            //alert("row click! " + kid);
                         });
 
                         var txt = $('#searchform').val();
