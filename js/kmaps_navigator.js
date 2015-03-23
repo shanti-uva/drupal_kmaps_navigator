@@ -40,9 +40,21 @@
                 return this;
             };
 
-            //console.log("BEGIN");
+
 
             var theType = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
+
+            // Root redirect to "places"
+            var fullpath = window.location.pathname;
+            var reg = new RegExp("^" + Drupal.settings.basePath);
+            var relpath = fullpath.replace(reg,"");
+            var rootComp = relpath.split("/")[0];
+            if (rootComp !== theType) {
+                var loc = Drupal.settings.basePath + theType;
+                console.log("REDIRECTING TO " +  loc);
+                window.location.href = loc;
+            }
+
             var Settings = {
                 type: theType,
                 baseUrl: 'http://' + theType + '.kmaps.virginia.edu',
