@@ -450,12 +450,11 @@
                         );
 
                         $(this.target).on('click', 'tr', function (event) {
-                            var kid = $(event.target).closest('.title-field').attr('kid') || $($(event.target).find('.title-field')[0]).attr('kid');
+                            var kid = $(event.target).closest('td').attr('kid') || $($(event.target).find('td')[0]).attr('kid');
                             $('.row_selected').removeClass('row_selected');
                             $(event.target).closest('tr').addClass('row_selected');
                             $("#tree").animate({scrollTop: 0}, "slow");
                             $("#tree").fancytree('getTree').activateKey(kid);
-                            //alert("row click! " + kid);
                         });
 
                         var txt = $('#searchform').val();
@@ -493,8 +492,8 @@
                         var info = (doc.feature_types) ? doc.feature_types[0] : doc.ancestors[0];
 
                         var output = '<tr>';
-                        output += '<td><span>' + doc.header + ' </span></td>';
-                        output += '<td id="links_' + localid + '" class="links"><span>' + info + '</span></td>';
+                        output += '<td kid="'+ localid +'"><span>' + doc.header + ' </span></td>';
+                        output += '<td id="links_' + localid + '" kid="' + localid + '" class="links"><span>' + info + '</span></td>';
                         output += '</tr>';
 
                         var elem = $(output);
