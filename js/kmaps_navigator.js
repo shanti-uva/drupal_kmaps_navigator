@@ -75,7 +75,7 @@
 
                     Settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
                     // event.preventDefault();
-                    var listitem = $(".title-field[kid='" + data.node.key + "']");
+                    var listitem = $("td[kid='" + data.node.key + "']");
                     $('.row_selected').removeClass('row_selected');
                     $(listitem).closest('tr').addClass('row_selected');
 
