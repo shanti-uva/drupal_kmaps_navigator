@@ -2,46 +2,49 @@
  * Created by ys2n on 10/3/14.
  */
 
+
+
+
+
 (function ($) {
+
+    $.fn.overlayMask = function (action) {
+        var mask = this.find('.overlay-mask');
+
+        // Create the required mask
+        if (!mask.length) {
+            mask = $('<div class="overlay-mask"><div class="loading-container"><div class="loading"></div><div id="loading-text">Searching&#133;</div></div></div>');
+            mask.css({
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                top: '0px',
+                left: '0px',
+                zIndex: 100,
+                opacity: 9,
+                backgrogroundColor: 'white'
+            }).appendTo(this).fadeTo(0, 0.5).find('div').position({
+                my: 'center center',
+                at: 'center center',
+                of: '.overlay-mask'
+            })
+        }
+
+        // Act based on params
+
+        if (!action || action === 'show') {
+            mask.show();
+        } else if (action === 'hide') {
+            mask.hide();
+        }
+        return this;
+    };
+
   Drupal.behaviors.kmaps_navigator = {
     attach: function (context, settings) {
         // add a new function overlayMask
 
         $('#kmaps-search').once('fancytree', function () {
-            $.fn.overlayMask = function (action) {
-                var mask = this.find('.overlay-mask');
-
-                // Create the required mask
-                if (!mask.length) {
-                    mask = $('<div class="overlay-mask"><div class="loading-container"><div class="loading"></div><div id="loading-text">Searching&#133;</div></div></div>');
-                    mask.css({
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        top: '0px',
-                        left: '0px',
-                        zIndex: 100,
-                        opacity: 9,
-                        backgrogroundColor: 'white'
-                    }).appendTo(this).fadeTo(0, 0.5).find('div').position({
-                        my: 'center center',
-                        at: 'center center',
-                        of: '.overlay-mask'
-                    })
-                }
-
-                // Act based on params
-
-                if (!action || action === 'show') {
-                    mask.show();
-                } else if (action === 'hide') {
-                    mask.hide();
-                }
-                return this;
-            };
-
-
-
             var theType = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
 
             // Root redirect to "places"
@@ -281,11 +284,11 @@
 
                                 // force the counts to be evaluated as numbers.
                                 var related_count = Number($(xml).find('related_feature_count').text());
-                                var description_count = Number($(xml).find('description_count').text());
-                                var place_count = Number($(xml).find('place_count').text());
-                                var picture_count = Number($(xml).find('picture_count').text());
-                                var video_count = Number($(xml).find('video_count').text());
-                                var document_count = Number($(xml).find('document_count').text());
+                                var description_count =  0; //Number($(xml).find('description_count').text());
+                                var place_count =  Number($(xml).find('place_count').text());
+                                var picture_count = 0; //Number($(xml).find('picture_count').text());
+                                var video_count = 0; //Number($(xml).find('video_count').text());
+                                var document_count = 0; //Number($(xml).find('document_count').text());
                                 var subject_count = Number($(xml).find('subject_count').text());
 
                                 if (Settings.type === "places") {
@@ -303,17 +306,16 @@
                             },
                             complete: function () {
 
-                                // console.log("HRUMPHPHPHP");
-                                // console.dir(Drupal.settings);
-                                // console.dir(Drupal.settings);
+                                var fq = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_solr_filter_query;
 
-
+                                var project_filter = (fq)?("&" + fq):"";
                                 var kmidxBase = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr;
                                 if (!kmidxBase) {
                                     kmidxBase = 'http://kidx.shanti.virginia.edu/solr/kmindex';
                                     console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase);
                                 }
-                                var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                                var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                                console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
                                     var updates = {};
                                     var data = JSON.parse(json);
