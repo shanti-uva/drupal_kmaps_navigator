@@ -115,7 +115,7 @@
                         })).join("/");
 
 
-                        decorateElementWithPopover(data.node.span, data.node.key, path, data.node.title, data.node.data.caption);
+                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
                         $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
                             var base = $(this).attr('id');
                             var argument = $(this).attr('argument');
@@ -526,6 +526,44 @@
 
                 Settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
 
+
+                // Faceted browsing for feature_types
+                AjaxSolr.FacetWidget = AjaxSolr.AbstractFacetWidget.extend({
+                    afterRequest: function () {
+                        if (this.manager.response.facet_counts.facet_fields[this.field] === undefined) {
+                            $(this.target).html('no items found in current selection');
+                            return;
+                        }
+
+                        var maxCount = 0;
+                        var objectedItems = [];
+                        for (var facet in this.manager.response.facet_counts.facet_fields[this.field]) {
+                            var count = parseInt(this.manager.response.facet_counts.facet_fields[this.field][facet]);
+                            if (count > maxCount) {
+                                maxCount = count;
+                            }
+                            objectedItems.push({ facet: facet, count: count });
+                        }
+                        objectedItems.sort(function (a, b) {
+                            return a.facet < b.facet ? -1 : 1;
+                        });
+
+                        $(this.target).empty();
+                        for (var i = 0, l = objectedItems.length; i < l; i++) {
+                            var facet = objectedItems[i].facet;
+                            var count = objectedItems[i].count;
+                            $(this.target).append(
+                                $('<option></option>')
+                                    .text(facet + "(" + count + ")")
+                                    //.addClass('tagcloud_size_' + parseInt(objectedItems[i].count / maxCount * 10))
+                                    //.click(this.clickHandler(facet))
+                            );
+
+                        }
+                        $(this.target).selectpicker('refresh');
+                    }
+                });
+
                 Manager = new AjaxSolr.Manager({
                     solrUrl: termidx + "/"
                 });
@@ -548,6 +586,13 @@
                 Manager.store.addByValue('fq', 'tree:' + Settings.type);
                 Manager.store.addByValue('sort', 'header asc');
                 Manager.store.addByValue('df', 'name');
+                Manager.store.addByValue('facet.field', [ 'feature_types'] );
+                Manager.store.addByValue('facet', true );
+                Manager.store.addByValue('facet.limit', 300);
+                Manager.store.addByValue('facet.mincount', 1);
+                Manager.store.addByValue('facet.mincount', 1);
+                Manager.store.addByValue('json.nl', 'map');
+
                 // Manager.doRequest();
 
                 Manager.addWidget(new AjaxSolr.PagerWidget({
@@ -568,7 +613,11 @@
                 }));
 
 
-
+                Manager.addWidget(new AjaxSolr.FacetWidget({
+                    id: 'feature_types',
+                    target: '#feature_types',
+                    field: 'feature_types'
+                }));
 
             });
             var kms = $("#searchform"); // the main search input

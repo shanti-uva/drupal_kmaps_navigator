@@ -126,7 +126,7 @@
 
                     <div class="form-group advanced-input select-type">
                         <span>Show only results containing:</span>
-                        <select class="selectpicker" id="selector1" name="selector1" data-selected-text-format="count>2" data-header="Select one or more..." data-width="100%" multiple >
+                        <select class="selectpicker" id="selector1" name="selector1" data-selected-text-format="count" data-header="Select one or <b>more...</b>" data-width="100%" multiple >
                             <option data-icon="shanticon-essays">Essays</option>
                             <option data-icon="shanticon-places">Places</option>
                             <option data-icon="shanticon-agents">Agents</option>
@@ -139,6 +139,23 @@
                             <option data-icon="shanticon-sources">Sources</option>
                         </select>
                     </div>
+                    <div class="form-group advanced-input select-type">
+                        <div class="form-group advanced-input select-type">
+                            <span>Show only feature types:</span>
+                            <select class="selectpicker" id="feature_types" name="selector2" data-selected-text-format="count" data-header="Select one <b>or</b> more..." data-width="100%" multiple >
+                                <option>Essays</option>
+                                <option>Essays</option>
+                                <option>Essays</option>
+                                <option>Essays</option>
+                                <option>Essays</option>
+                                <option>Essays</option>
+                                <option>Essays</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
 
                 </section><!-- END advanced section -->
             </fieldset>
