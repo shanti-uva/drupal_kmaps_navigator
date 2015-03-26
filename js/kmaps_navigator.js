@@ -115,7 +115,7 @@
                         })).join("/");
 
 
-                        decorateElementWithPopover(data.node.span, data.node.key, path, data.node.title, data.node.data.caption);
+                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
                         $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
                             var base = $(this).attr('id');
                             var argument = $(this).attr('argument');
