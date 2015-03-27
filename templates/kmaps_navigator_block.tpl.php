@@ -148,18 +148,13 @@
     <!-- BEGIN view section -->
     <section class="view-section">
         <ul class="nav nav-tabs">
-            <li class="treeview active"><a href=".treeview" data-toggle="tab"><span class="icon shanticon-tree"></span>Tree</a></li>
-            <li class="listview"><a href=".listview" data-toggle="tab"><span class="icon shanticon-list"></span>List</a></li>
+            <li class="listview active"><a href=".listview" data-toggle="tab"><span class="icon shanticon-list"></span>List</a></li>
+            <li class="treeview"><a href=".treeview" data-toggle="tab"><span class="icon shanticon-tree"></span>Tree</a></li>
         </ul>
         <div class="tab-content">
-            <!-- TAB - tree view -->
-            <div class="treeview tab-pane active">
-                <div id="tree" class="view-wrap"><!-- view-wrap controls tree container height --></div>
-            </div>
             <!-- TAB - list view -->
-            <div class="listview tab-pane">
+            <div class="listview tab-pane active">
                 <div id="pager" class="pagination"></div>
-
                 <div class="view-wrap"> <!-- view-wrap controls container height -->
                     <div class="table-responsive">
                         <table class="table table-condensed table-results">
@@ -174,6 +169,10 @@
                         <div id="pager-header"></div>
                     </div>
                 </div>
+            </div>
+            <!-- TAB - tree view -->
+            <div class="treeview tab-pane">
+                <div id="tree" class="view-wrap"><!-- view-wrap controls tree container height --></div>
             </div>
         </div>
 

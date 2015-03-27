@@ -284,11 +284,11 @@
 
                                 // force the counts to be evaluated as numbers.
                                 var related_count = Number($(xml).find('related_feature_count').text());
-                                var description_count =  0; //Number($(xml).find('description_count').text());
+                                var description_count =  Number($(xml).find('description_count').text());
                                 var place_count =  Number($(xml).find('place_count').text());
-                                var picture_count = 0; //Number($(xml).find('picture_count').text());
-                                var video_count = 0; //Number($(xml).find('video_count').text());
-                                var document_count = 0; //Number($(xml).find('document_count').text());
+                                var picture_count = Number($(xml).find('picture_count').text());
+                                var video_count = Number($(xml).find('video_count').text());
+                                var document_count = Number($(xml).find('document_count').text());
                                 var subject_count = Number($(xml).find('subject_count').text());
 
                                 if (Settings.type === "places") {
@@ -301,7 +301,7 @@
                                 countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-photos'></i><span class='badge' >" + picture_count + "</span></span>");
                                 countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-places'></i><span class='badge' >" + place_count + "</span></span>");
                                 countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-subjects'></i><span class='badge' >" + subject_count + "</span></span>");
-                                countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-essays'></i><span class='badge' >" + description_count + "</span></span>");
+                                countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-texts'></i><span class='badge' >" + description_count + "</span></span>");
 
                             },
                             complete: function () {
@@ -357,7 +357,7 @@
                         places.parent().show()
                     }
 
-                    var essays = elem.find('i.shanticon-essays ~ span.badge');
+                    var essays = elem.find('i.shanticon-texts ~ span.badge');
                     if (typeof(counts.texts) != "undefined") {
                         essays.html(counts["texts"])
                     }
@@ -494,7 +494,7 @@
                             "<span style='display: none;' class='associated'><i class='icon shanticon-audio-video'></i><span class='badge alert-success'>0</span></span>" +
                             "<span style='display: none;' class='associated'><i class='icon shanticon-photos'></i><span class='badge alert-success'>0</span></span>" +
                             "<span style='display: none;' class='associated'><i class='icon shanticon-places'></i><span class='badge alert-success'>0</span></span>" +
-                            "<span style='display: none;' class='associated'><i class='icon shanticon-essays'></i><span class='badge alert-success'>0</span></span>" +
+                            "<span style='display: none;' class='associated'><i class='icon shanticon-texts'></i><span class='badge alert-success'>0</span></span>" +
                             "<span style='display: none;' class='associated'><i class='icon shanticon-subjects'></i><span class='badge alert-success'>0</span></span>" +
                             "</div>";
                         var content = path + caption + "<div class='info-wrap' id='infowrap" + localid + "'>" + lazycounts + "</div>";
