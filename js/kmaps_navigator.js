@@ -175,6 +175,39 @@
                 focus: function (event, data) {
                     data.node.scrollIntoView(true);
                 },
+                create: function(evt,ctx) {
+                    //console.log("EVENT: Create");
+                    //console.dir(evt);
+                    //console.dir(ctx);
+                },
+
+                loadChildren: function(evt,ctx) {
+                    // console.log("pathname = " + window.location.pathname);
+                    // console.log("baseType = "  + Drupal.settings.basePath + Settings.type);
+
+
+
+                    if (window.location.pathname === Drupal.settings.basePath + Settings.type) {
+                        //console.dir(Drupal);
+                        //console.log("EVENT: loadChildren");
+                        //console.dir(evt);
+                        //console.dir(ctx);
+
+                        //console.log("YEERT: " + Settings.type);
+                        var startId = Drupal.settings.shanti_kmaps_admin['shanti_kmaps_admin_root_' + Settings.type + '_id'];
+
+                        if (startId) {
+                            //ctx.tree.activateKey(startId);
+                            var startNode = ctx.tree.getNodeByKey(startId);
+                            if (startNode) {
+                                console.log("autoExpanding node: " + startNode.title + " (" + startNode.key + ")");
+                                try { startNode.setExpanded(true); } catch( e ) { console.err ("autoExpand failed")}
+                            }
+                        }
+                    }
+                    // how to determine which key to use?
+                    // console.log(ctx.tree.activateKey(427).setExpanded(true));
+                },
                 cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
                 idPrefix: "kmaps1tree"
             });
@@ -315,7 +348,7 @@
                                     console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase);
                                 }
                                 var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
-                                console.log ("solrURL = " + solrURL);
+                                // console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
                                     var updates = {};
                                     var data = JSON.parse(json);
