@@ -201,7 +201,10 @@
                             var startNode = ctx.tree.getNodeByKey(startId);
                             if (startNode) {
                                 console.log("autoExpanding node: " + startNode.title + " (" + startNode.key + ")");
-                                try { startNode.setExpanded(true); } catch( e ) { console.err ("autoExpand failed")}
+                                try {
+                                    startNode.setExpanded(true);
+                                    startNode.makeVisible();
+                                } catch( e ) { console.err ("autoExpand failed")}
                             }
                         }
                     //}
