@@ -187,7 +187,7 @@
 
 
 
-                    if (window.location.pathname === Drupal.settings.basePath + Settings.type) {
+                    //if (window.location.pathname === Drupal.settings.basePath + Settings.type) {
                         //console.dir(Drupal);
                         //console.log("EVENT: loadChildren");
                         //console.dir(evt);
@@ -204,9 +204,7 @@
                                 try { startNode.setExpanded(true); } catch( e ) { console.err ("autoExpand failed")}
                             }
                         }
-                    }
-                    // how to determine which key to use?
-                    // console.log(ctx.tree.activateKey(427).setExpanded(true));
+                    //}
                 },
                 cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
                 idPrefix: "kmaps1tree"
