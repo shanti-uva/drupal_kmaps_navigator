@@ -161,7 +161,7 @@
                     url: Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val(),
                     cache: false,
                     debugDelay: 1000,
-                    timeout: 30000,
+                    timeout: 90000,
                     error: function (e) {
                         notify.warn("networkerror", "Error retrieving tree from kmaps server. Error: " + e.message);
                     },
@@ -306,7 +306,7 @@
                             type: "GET",
                             url: Settings.baseUrl + "/features/" + key + ".xml",
                             dataType: "xml",
-                            timeout: 30000,
+                            timeout: 90000,
                             beforeSend: function () {
                                 countsElem.html("<span class='assoc-resources-loading'>loading...</span>");
                             },
