@@ -116,6 +116,7 @@
                     return data;
                 },
                 renderNode: function (event, data) {
+                    data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
                     //console.log("renderNode: " + $(data.node.span).val());
                     //console.dir(data);
                     //
@@ -124,11 +125,6 @@
 
                     //console.log(JSON.stringify(event) + ": " + data.node.statusNodeType);
 
-                    //
-                    //if (!data.node.isStatusNode()) {
-                    //
-                    //
-                    //}
                     return data;
                 },
                 glyph: {
