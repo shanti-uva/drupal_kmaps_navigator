@@ -37,7 +37,7 @@
                             <input type="radio" name="scope" id="scopeAll" value="all" checked="checked">
                             All Text</label>
                         <label class="radio-inline" for="scopeName">
-                            <input type="radio" name="scope" id="scopeName" value="name">
+                            <input disabled="disabled" type="radio" name="scope" id="scopeName" value="name">
                             Name </label>
                     </div>
 
