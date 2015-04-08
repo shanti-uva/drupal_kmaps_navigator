@@ -51,8 +51,8 @@ function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
 
     // Need to add debugging (the returned object from libraries_load is the only error logging you ever get)
 
-    libraries_load('fancytree','source');
-    libraries_load('ajaxsolr');
+    error_log("loading fancytree: " . print_r(libraries_load('fancytree','source'),true));
+    error_log("loading ajaxsolr: " . print_r(libraries_load('ajaxsolr'), true));
     drupal_add_js(drupal_get_path('module', 'kmaps_navigator') . "/js/kmaps_navigator.js",array(
             'group' => JS_THEME,
         ));
