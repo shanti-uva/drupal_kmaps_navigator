@@ -23,8 +23,8 @@
 
                     <!-- search scope -->
                     <div class="form-group">
-                        <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>
-                        <label class="checkbox-inline" ><input type="checkbox" id="essayscope" name="essay-scope" data-value="essays">Essays</label>
+<!--                        <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>-->
+<!--                        <label class="checkbox-inline" ><input type="checkbox" id="essayscope" name="essay-scope" data-value="essays">Essays</label>-->
                         <a href="#" class="advanced-link toggle-link"><span class="icon"></span>Advanced</a>
                     </div>
                 </div><!-- END search group -->
@@ -52,8 +52,6 @@
                             <input type="radio" name="anchor" id="anchorExact" value="exact">
                             Exactly</label>
                     </div>
-
-
 
                     <!-- feature 1 type -->
                     <div class="form-group advanced-input feature-group dropdown" style="display:none;">
@@ -124,21 +122,21 @@
                     </div> <!-- END feature-group -->
 
 
-                    <div class="form-group advanced-input select-type">
-                        <span>Show only results containing:</span>
-                        <select class="selectpicker" id="selector1" name="selector1" data-selected-text-format="count>2" data-header="Select one or more..." data-width="100%" multiple >
-                            <option data-icon="shanticon-essays">Essays</option>
-                            <option data-icon="shanticon-places">Places</option>
-                            <option data-icon="shanticon-agents">Agents</option>
-                            <option data-icon="shanticon-events">Events</option>
-                            <option data-icon="shanticon-photos">Photos</option>
-                            <option data-icon="shanticon-audio-video">Audio-Video</option>
-                            <option data-icon="shanticon-visuals">Visuals</option>
-                            <option data-icon="shanticon-texts">Texts</option>
-                            <option data-icon="shanticon-terms">Terms</option>
-                            <option data-icon="shanticon-sources">Sources</option>
-                        </select>
-                    </div>
+<!--                    <div class="form-group advanced-input select-type">-->
+<!--                        <span>Show only results containing:</span>-->
+<!--                        <select class="selectpicker" id="selector1" name="selector1" data-selected-text-format="count>2" data-header="Select one or more..." data-width="100%" multiple >-->
+<!--                            <option data-icon="shanticon-essays">Essays</option>-->
+<!--                            <option data-icon="shanticon-places">Places</option>-->
+<!--                            <option data-icon="shanticon-agents">Agents</option>-->
+<!--                            <option data-icon="shanticon-events">Events</option>-->
+<!--                            <option data-icon="shanticon-photos">Photos</option>-->
+<!--                            <option data-icon="shanticon-audio-video">Audio-Video</option>-->
+<!--                            <option data-icon="shanticon-visuals">Visuals</option>-->
+<!--                            <option data-icon="shanticon-texts">Texts</option>-->
+<!--                            <option data-icon="shanticon-terms">Terms</option>-->
+<!--                            <option data-icon="shanticon-sources">Sources</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
 
                 </section><!-- END advanced section -->
             </fieldset>

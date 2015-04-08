@@ -97,6 +97,22 @@
                     //console.log("createNode: " + data.node.span)
                     //console.dir(data);
                     data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
+
+                    //console.log("STATUS NODE: " + data.node.isStatusNode());
+                    //data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
+                    var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
+                        return x.title;
+                    })).join("/");
+
+                    var theElem = data.node.span;
+                    var theKey = data.node.key;
+                    var theType = Settings.type;
+                    var theTitle = data.node.title;
+                    var theCaption = data.node.data.caption;
+
+                    decorateElementWithPopover(theElem, theKey,theTitle, path,theCaption );
+                    decorateElemWithDrupalAjax(theElem, theKey, theType);
+
                     return data;
                 },
                 renderNode: function (event, data) {
@@ -108,36 +124,11 @@
 
                     //console.log(JSON.stringify(event) + ": " + data.node.statusNodeType);
 
-
-                    if (!data.node.isStatusNode()) {
-
-                        //console.log("STATUS NODE: " + data.node.isStatusNode());
-                        data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
-                        var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
-                            return x.title;
-                        })).join("/");
-
-
-                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
-                        $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
-                            var base = $(this).attr('id');
-                            var argument = $(this).attr('argument');
-                            var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
-
-                            var element_settings = {
-                                url: url,
-                                event: 'navigate',
-                                progress: {
-                                    type: 'throbber'
-                                }
-                            };
-                            Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
-                            //this.click(function () {
-                            //    console.log("pushing state for " + url);
-                            //    window.history.pushState({tag: true}, null, url);
-                            //});
-                        });
-                    }
+                    //
+                    //if (!data.node.isStatusNode()) {
+                    //
+                    //
+                    //}
                     return data;
                 },
                 glyph: {
@@ -272,6 +263,7 @@
             }
 
             function decorateElementWithPopover(elem, key, title, path, caption) {
+                //console.log("decorateElementWithPopover: "  + elem);
                 if (jQuery(elem).popover) {
                     jQuery(elem).attr('rel', 'popover');
                     jQuery(elem).popover({
@@ -414,6 +406,30 @@
                 return elem;
             };
 
+            function decorateElemWithDrupalAjax(theElem, theKey, theType) {
+                //console.log("decorateElementWithDrupalAjax: "  + $(theElem).html());
+                $(theElem).once('nav', function () {
+                    //console.log("applying click handling to " + $(this).html());
+                    var base = $(this).attr('id') || "ajax-wax-" + theKey;
+                    var argument = $(this).attr('argument');
+                    var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(theType)) + theType + '/' + theKey + '/overview/nojs';
+
+                    var element_settings = {
+                        url: url,
+                        event:  'navigate',
+                        progress: {
+                            type: 'throbber'
+                        }
+                    };
+                    console.log("Adding to ajax to " + base);
+                    Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
+                    //this.click(function () {
+                    //    console.log("pushing state for " + url);
+                    //    window.history.pushState({tag: true}, null, url);
+                    //});
+                });
+            };
+
             var searchUtil = {
                 clearSearch: function () {
                     //        console.log("BANG: searchUtil.clearSearch()");
@@ -535,7 +551,7 @@
                         var title = doc.header + kmapid;
                         var info = (doc.feature_types) ? doc.feature_types[0] : doc.ancestors[0];
 
-                        var output = '<tr>';
+                        var output = '<tr id="ajax-tr-id-' + localid + '" >';
                         output += '<td kid="'+ localid +'"><span>' + doc.header + ' </span></td>';
                         output += '<td id="links_' + localid + '" kid="' + localid + '" class="links"><span>' + info + '</span></td>';
                         output += '</tr>';
@@ -544,6 +560,8 @@
                         decorateElementWithPopover(elem, localid, doc.header, $.makeArray(doc.ancestors.map(function (x) {
                             return x;
                         })).join("/"), caption);
+                        decorateElemWithDrupalAjax(elem,localid,Settings.type);
+                        $(elem).on('click',function() {$(elem).trigger('navigate');})
                         return elem;
                     }
                 });
