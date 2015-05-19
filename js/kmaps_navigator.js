@@ -2,46 +2,49 @@
  * Created by ys2n on 10/3/14.
  */
 
+
+
+
+
 (function ($) {
+
+    $.fn.overlayMask = function (action) {
+        var mask = this.find('.overlay-mask');
+
+        // Create the required mask
+        if (!mask.length) {
+            mask = $('<div class="overlay-mask"><div class="loading-container"><div class="loading"></div><div id="loading-text">Searching&#133;</div></div></div>');
+            mask.css({
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                top: '0px',
+                left: '0px',
+                zIndex: 100,
+                opacity: 9,
+                backgrogroundColor: 'white'
+            }).appendTo(this).fadeTo(0, 0.5).find('div').position({
+                my: 'center center',
+                at: 'center center',
+                of: '.overlay-mask'
+            })
+        }
+
+        // Act based on params
+
+        if (!action || action === 'show') {
+            mask.show();
+        } else if (action === 'hide') {
+            mask.hide();
+        }
+        return this;
+    };
+
   Drupal.behaviors.kmaps_navigator = {
     attach: function (context, settings) {
         // add a new function overlayMask
 
         $('#kmaps-search').once('fancytree', function () {
-            $.fn.overlayMask = function (action) {
-                var mask = this.find('.overlay-mask');
-
-                // Create the required mask
-                if (!mask.length) {
-                    mask = $('<div class="overlay-mask"><div class="loading-container"><div class="loading"></div><div id="loading-text">Searching&#133;</div></div></div>');
-                    mask.css({
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        top: '0px',
-                        left: '0px',
-                        zIndex: 100,
-                        opacity: 9,
-                        backgrogroundColor: 'white'
-                    }).appendTo(this).fadeTo(0, 0.5).find('div').position({
-                        my: 'center center',
-                        at: 'center center',
-                        of: '.overlay-mask'
-                    })
-                }
-
-                // Act based on params
-
-                if (!action || action === 'show') {
-                    mask.show();
-                } else if (action === 'hide') {
-                    mask.hide();
-                }
-                return this;
-            };
-
-
-
             var theType = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
 
             // Root redirect to "places"
@@ -94,9 +97,26 @@
                     //console.log("createNode: " + data.node.span)
                     //console.dir(data);
                     data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
+
+                    //console.log("STATUS NODE: " + data.node.isStatusNode());
+                    //data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
+                    var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
+                        return x.title;
+                    })).join("/");
+
+                    var theElem = data.node.span;
+                    var theKey = data.node.key;
+                    var theType = Settings.type;
+                    var theTitle = data.node.title;
+                    var theCaption = data.node.data.caption;
+
+                    decorateElementWithPopover(theElem, theKey,theTitle, path,theCaption );
+                    decorateElemWithDrupalAjax(theElem, theKey, theType);
+
                     return data;
                 },
                 renderNode: function (event, data) {
+                    data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
                     //console.log("renderNode: " + $(data.node.span).val());
                     //console.dir(data);
                     //
@@ -158,7 +178,7 @@
                     url: Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val(),
                     cache: false,
                     debugDelay: 1000,
-                    timeout: 30000,
+                    timeout: 90000,
                     error: function (e) {
                         notify.warn("networkerror", "Error retrieving tree from kmaps server. Error: " + e.message);
                     },
@@ -171,6 +191,40 @@
                 },
                 focus: function (event, data) {
                     data.node.scrollIntoView(true);
+                },
+                create: function(evt,ctx) {
+                    //console.log("EVENT: Create");
+                    //console.dir(evt);
+                    //console.dir(ctx);
+                },
+
+                loadChildren: function(evt,ctx) {
+                    // console.log("pathname = " + window.location.pathname);
+                    // console.log("baseType = "  + Drupal.settings.basePath + Settings.type);
+
+
+
+                    //if (window.location.pathname === Drupal.settings.basePath + Settings.type) {
+                        //console.dir(Drupal);
+                        //console.log("EVENT: loadChildren");
+                        //console.dir(evt);
+                        //console.dir(ctx);
+
+                        //console.log("YEERT: " + Settings.type);
+                        var startId = Drupal.settings.shanti_kmaps_admin['shanti_kmaps_admin_root_' + Settings.type + '_id'];
+
+                        if (startId) {
+                            //ctx.tree.activateKey(startId);
+                            var startNode = ctx.tree.getNodeByKey(startId);
+                            if (startNode) {
+                                console.log("autoExpanding node: " + startNode.title + " (" + startNode.key + ")");
+                                try {
+                                    startNode.setExpanded(true);
+                                    startNode.makeVisible();
+                                } catch( e ) { console.err ("autoExpand failed")}
+                            }
+                        }
+                    //}
                 },
                 cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
                 idPrefix: "kmaps1tree"
@@ -235,6 +289,7 @@
             }
 
             function decorateElementWithPopover(elem, key, title, path, caption) {
+                //console.log("decorateElementWithPopover: "  + elem);
                 if (jQuery(elem).popover) {
                     jQuery(elem).attr('rel', 'popover');
                     jQuery(elem).popover({
@@ -269,7 +324,7 @@
                             type: "GET",
                             url: Settings.baseUrl + "/features/" + key + ".xml",
                             dataType: "xml",
-                            timeout: 30000,
+                            timeout: 90000,
                             beforeSend: function () {
                                 countsElem.html("<span class='assoc-resources-loading'>loading...</span>");
                             },
@@ -281,8 +336,8 @@
 
                                 // force the counts to be evaluated as numbers.
                                 var related_count = Number($(xml).find('related_feature_count').text());
-                                var description_count = Number($(xml).find('description_count').text());
-                                var place_count = Number($(xml).find('place_count').text());
+                                var description_count =  Number($(xml).find('description_count').text());
+                                var place_count =  Number($(xml).find('place_count').text());
                                 var picture_count = Number($(xml).find('picture_count').text());
                                 var video_count = Number($(xml).find('video_count').text());
                                 var document_count = Number($(xml).find('document_count').text());
@@ -298,22 +353,21 @@
                                 countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-photos'></i><span class='badge' >" + picture_count + "</span></span>");
                                 countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-places'></i><span class='badge' >" + place_count + "</span></span>");
                                 countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-subjects'></i><span class='badge' >" + subject_count + "</span></span>");
-                                countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-essays'></i><span class='badge' >" + description_count + "</span></span>");
+                                countsElem.append("<span style='display: none' class='associated'><i class='icon shanticon-texts'></i><span class='badge' >" + description_count + "</span></span>");
 
                             },
                             complete: function () {
 
-                                // console.log("HRUMPHPHPHP");
-                                // console.dir(Drupal.settings);
-                                // console.dir(Drupal.settings);
+                                var fq = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_solr_filter_query;
 
-
+                                var project_filter = (fq)?("&" + fq):"";
                                 var kmidxBase = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr;
                                 if (!kmidxBase) {
                                     kmidxBase = 'http://kidx.shanti.virginia.edu/solr/kmindex';
                                     console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase);
                                 }
-                                var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + '&fq=&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                                var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                                // console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
                                     var updates = {};
                                     var data = JSON.parse(json);
@@ -355,7 +409,7 @@
                         places.parent().show()
                     }
 
-                    var essays = elem.find('i.shanticon-essays ~ span.badge');
+                    var essays = elem.find('i.shanticon-texts ~ span.badge');
                     if (typeof(counts.texts) != "undefined") {
                         essays.html(counts["texts"])
                     }
@@ -376,6 +430,30 @@
 
 
                 return elem;
+            };
+
+            function decorateElemWithDrupalAjax(theElem, theKey, theType) {
+                //console.log("decorateElementWithDrupalAjax: "  + $(theElem).html());
+                $(theElem).once('nav', function () {
+                    //console.log("applying click handling to " + $(this).html());
+                    var base = $(this).attr('id') || "ajax-wax-" + theKey;
+                    var argument = $(this).attr('argument');
+                    var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(theType)) + theType + '/' + theKey + '/overview/nojs';
+
+                    var element_settings = {
+                        url: url,
+                        event:  'navigate',
+                        progress: {
+                            type: 'throbber'
+                        }
+                    };
+                    console.log("Adding to ajax to " + base);
+                    Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
+                    //this.click(function () {
+                    //    console.log("pushing state for " + url);
+                    //    window.history.pushState({tag: true}, null, url);
+                    //});
+                });
             };
 
             var searchUtil = {
@@ -492,14 +570,14 @@
                             "<span style='display: none;' class='associated'><i class='icon shanticon-audio-video'></i><span class='badge alert-success'>0</span></span>" +
                             "<span style='display: none;' class='associated'><i class='icon shanticon-photos'></i><span class='badge alert-success'>0</span></span>" +
                             "<span style='display: none;' class='associated'><i class='icon shanticon-places'></i><span class='badge alert-success'>0</span></span>" +
-                            "<span style='display: none;' class='associated'><i class='icon shanticon-essays'></i><span class='badge alert-success'>0</span></span>" +
+                            "<span style='display: none;' class='associated'><i class='icon shanticon-texts'></i><span class='badge alert-success'>0</span></span>" +
                             "<span style='display: none;' class='associated'><i class='icon shanticon-subjects'></i><span class='badge alert-success'>0</span></span>" +
                             "</div>";
                         var content = path + caption + "<div class='info-wrap' id='infowrap" + localid + "'>" + lazycounts + "</div>";
                         var title = doc.header + kmapid;
                         var info = (doc.feature_types) ? doc.feature_types[0] : doc.ancestors[0];
 
-                        var output = '<tr>';
+                        var output = '<tr id="ajax-tr-id-' + localid + '" >';
                         output += '<td kid="'+ localid +'"><span>' + doc.header + ' </span></td>';
                         output += '<td id="links_' + localid + '" kid="' + localid + '" class="links"><span>' + info + '</span></td>';
                         output += '</tr>';
@@ -508,6 +586,8 @@
                         decorateElementWithPopover(elem, localid, doc.header, $.makeArray(doc.ancestors.map(function (x) {
                             return x;
                         })).join("/"), caption);
+                        decorateElemWithDrupalAjax(elem,localid,Settings.type);
+                        $(elem).on('click',function() {$(elem).trigger('navigate');})
                         return elem;
                     }
                 });
