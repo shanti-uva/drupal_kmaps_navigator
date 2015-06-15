@@ -635,8 +635,6 @@
                             $(this.target).append(
                                 $('<option></option>')
                                     .text(facet + "(" + count + ")")
-                                    //.addClass('tagcloud_size_' + parseInt(objectedItems[i].count / maxCount * 10))
-                                    //.click(this.clickHandler(facet))
                             );
 
                         }
