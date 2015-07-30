@@ -5,7 +5,9 @@
 ?>
 
 
-<?php error_log("Yo bang on the new template!  What to do now?"); ?>
+<?php 
+//error_log("Yo bang on the new template!  What to do now?"); 
+?>
 
 <section id="kmaps-search" role="search">
     <!-- BEGIN Input section -->
