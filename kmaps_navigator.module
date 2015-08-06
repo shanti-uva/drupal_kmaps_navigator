@@ -47,12 +47,14 @@ function kmaps_navigator_block_info() {
  * Prepares the contents of the block.
  */
 function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
-//    error_log("loading json2: " . print_r(libraries_load('json2'),true));
-
+		// error_log("loading json2: " . print_r(libraries_load('json2'),true));
+		libraries_load('json2');
     // Need to add debugging (the returned object from libraries_load is the only error logging you ever get)
-
-    error_log("loading fancytree: " . print_r(libraries_load('fancytree','source'),true));
-    error_log("loading ajaxsolr: " . print_r(libraries_load('ajaxsolr'), true));
+    //error_log("loading fancytree: " . print_r(libraries_load('fancytree','source'),true));
+    libraries_load('fancytree','source');
+    //error_log("loading ajaxsolr: " . print_r(libraries_load('ajaxsolr'), true));
+    libraries_load('ajaxsolr');
+		
     drupal_add_js(drupal_get_path('module', 'kmaps_navigator') . "/js/kmaps_navigator.js",array(
             'group' => JS_THEME,
         ));
