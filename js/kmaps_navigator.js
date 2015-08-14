@@ -108,7 +108,7 @@
                     var theKey = data.node.key;
                     var theType = Settings.type;
                     var theTitle = data.node.title;
-                    var theCaption = data.node.data.caption;
+                    var theCaption = data.node.data.caption_eng;
 
                     decorateElementWithPopover(theElem, theKey,theTitle, path,theCaption );
                     decorateElemWithDrupalAjax(theElem, theKey, theType);
@@ -135,7 +135,7 @@
                         })).join("/");
 
 
-                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
+                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption_eng);
                         $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
                             var base = $(this).attr('id');
                             var argument = $(this).attr('argument');
@@ -238,7 +238,8 @@
             });
 
             $("#searchbutton").on('click', function () {
-                // console.log("triggering doSearch!");
+                console.log("triggering doSearch!");
+                $(".listview").tab('show');
                 $("#searchform").trigger('doSearch');
             })
 
@@ -447,7 +448,6 @@
                             type: 'throbber'
                         }
                     };
-                    console.log("Adding to ajax to " + base);
                     Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
                     //this.click(function () {
                     //    console.log("pushing state for " + url);
@@ -639,6 +639,7 @@
 
                         }
                         $(this.target).selectpicker('refresh');
+                        // $(this.target).on('change', function(x) {  alert(x)})
                     }
                 });
 
@@ -670,6 +671,8 @@
                 Manager.store.addByValue('facet.mincount', 1);
                 Manager.store.addByValue('facet.mincount', 1);
                 Manager.store.addByValue('json.nl', 'map');
+                //Manager.store.addByValue('hl','true');
+                //Manager.store.addByValue('hl.fl','name*');
 
                 // Manager.doRequest();
 
