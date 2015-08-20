@@ -239,7 +239,6 @@
 
             $("#searchbutton").on('click', function () {
                 console.log("triggering doSearch!");
-                $(".listview").tab('show');
                 $("#searchform").trigger('doSearch');
             })
 
