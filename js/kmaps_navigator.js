@@ -30,6 +30,7 @@
             })
         }
 
+
         // Act based on params
 
         if (!action || action === 'show') {
@@ -110,6 +111,7 @@
                     var theTitle = data.node.title;
                     var theCaption = data.node.data.caption_eng;
 
+
                     decorateElementWithPopover(theElem, theKey,theTitle, path,theCaption );
                     decorateElemWithDrupalAjax(theElem, theKey, theType);
 
@@ -124,7 +126,6 @@
                     //console.log("Loading? " + data.node.isLoading());
 
                     //console.log(JSON.stringify(event) + ": " + data.node.statusNodeType);
-
 
                     if (!data.node.isStatusNode()) {
 
@@ -155,6 +156,7 @@
                             //});
                         });
                     }
+
                     return data;
                 },
                 glyph: {
@@ -369,6 +371,7 @@
                                 var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
                                 // console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
+                                    console.log(json);
                                     var updates = {};
                                     var data = JSON.parse(json);
                                     $.each(data.grouped.asset_type.groups, function (x, y) {
@@ -447,6 +450,9 @@
                             type: 'throbber'
                         }
                     };
+
+                    // console.log("Adding to ajax to " + base);
+
                     Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
                     //this.click(function () {
                     //    console.log("pushing state for " + url);

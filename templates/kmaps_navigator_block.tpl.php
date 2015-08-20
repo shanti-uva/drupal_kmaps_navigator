@@ -5,7 +5,9 @@
 ?>
 
 
-<?php error_log("Yo bang on the new template!  What to do now?"); ?>
+<?php 
+//error_log("Yo bang on the new template!  What to do now?"); 
+?>
 
 <section id="kmaps-search" role="search">
     <!-- BEGIN Input section -->
@@ -124,7 +126,7 @@
                     </div> <!-- END feature-group -->
 
 
-                    <div class="form-group advanced-input select-type">
+                    <div class="form-group advanced-input select-type" >
                         <span>Show only results containing:</span>
                         <select class="selectpicker" id="selector1" name="selector1" data-selected-text-format="count" data-header="Select one or <b>more...</b>" data-width="100%" multiple >
                             <option data-icon="shanticon-essays">Essays</option>
