@@ -294,14 +294,14 @@
                 if (jQuery(elem).popover) {
                     jQuery(elem).attr('rel', 'popover');
 
-                    console.log("caption = " + caption);
+                    //console.log("caption = " + caption);
                     jQuery(elem).popover({
                             html: true,
                             content: function () {
                                caption = ((caption) ? caption : "");
                                 var popover = "<div class='kmap-path'>/" + path + "</div>" + "<div class='kmap-caption'>" + caption + "</div>" +
                                     "<div class='info-wrap' id='infowrap" + key + "'><div class='counts-display'>...</div></div>";
-                                console.log("Captioning: " + caption);
+                                //console.log("Captioning: " + caption);
                                 return popover;
                             },
                             title: function () {
@@ -373,7 +373,7 @@
                                 var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
                                 // console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
-                                    console.log(json);
+                                    //console.log(json);
                                     var updates = {};
                                     var data = JSON.parse(json);
                                     $.each(data.grouped.asset_type.groups, function (x, y) {
