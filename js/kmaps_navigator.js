@@ -109,8 +109,7 @@
                     var theKey = data.node.key;
                     var theType = Settings.type;
                     var theTitle = data.node.title;
-                    var theCaption = data.node.data.caption_eng;
-
+                    var theCaption = data.node.data.caption;
 
                     decorateElementWithPopover(theElem, theKey,theTitle, path,theCaption );
                     decorateElemWithDrupalAjax(theElem, theKey, theType);
@@ -136,7 +135,7 @@
                         })).join("/");
 
 
-                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption_eng);
+                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
                         $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
                             var base = $(this).attr('id');
                             var argument = $(this).attr('argument');
@@ -294,12 +293,15 @@
                 //console.log("decorateElementWithPopover: "  + elem);
                 if (jQuery(elem).popover) {
                     jQuery(elem).attr('rel', 'popover');
+
+                    console.log("caption = " + caption);
                     jQuery(elem).popover({
                             html: true,
                             content: function () {
-                                var caption = ((caption) ? caption : "");
-                                var popover = "<div class='kmap-path'>/" + path + "</div>" + caption +
+                               caption = ((caption) ? caption : "");
+                                var popover = "<div class='kmap-path'>/" + path + "</div>" + "<div class='kmap-caption'>" + caption + "</div>" +
                                     "<div class='info-wrap' id='infowrap" + key + "'><div class='counts-display'>...</div></div>";
+                                console.log("Captioning: " + caption);
                                 return popover;
                             },
                             title: function () {
@@ -567,7 +569,7 @@
                         var path = "<div class='kmap-path'>/" + $.makeArray(doc.ancestors.map(function (x) {
                                 return x;
                             })).join("/") + "</div>";
-                        var caption = ((doc.caption_eng) ? doc.caption_eng : "");
+                        var caption = $((doc.caption_eng) ? doc.caption_eng[0] : "").text();
                         var localid = doc.id.replace('subjects-', '').replace('places-', ''); // shave the kmaps name from the id.
                         var kmapid = "<span class='kmapid-display'>" + localid + "</span>";
                         var lazycounts = "<div class='counts-display'>" +
@@ -586,6 +588,8 @@
                         output += '<td kid="'+ localid +'"><span>' + doc.header + ' </span></td>';
                         output += '<td id="links_' + localid + '" kid="' + localid + '" class="links"><span>' + info + '</span></td>';
                         output += '</tr>';
+
+
 
                         var elem = $(output);
                         decorateElementWithPopover(elem, localid, doc.header, $.makeArray(doc.ancestors.map(function (x) {
