@@ -30,6 +30,7 @@
             })
         }
 
+
         // Act based on params
 
         if (!action || action === 'show') {
@@ -125,6 +126,36 @@
 
                     //console.log(JSON.stringify(event) + ": " + data.node.statusNodeType);
 
+                    if (!data.node.isStatusNode()) {
+
+                        //console.log("STATUS NODE: " + data.node.isStatusNode());
+                        data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
+                        var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
+                            return x.title;
+                        })).join("/");
+
+
+                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
+                        $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
+                            var base = $(this).attr('id');
+                            var argument = $(this).attr('argument');
+                            var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
+
+                            var element_settings = {
+                                url: url,
+                                event: 'navigate',
+                                progress: {
+                                    type: 'throbber'
+                                }
+                            };
+                            Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
+                            //this.click(function () {
+                            //    console.log("pushing state for " + url);
+                            //    window.history.pushState({tag: true}, null, url);
+                            //});
+                        });
+                    }
+
                     return data;
                 },
                 glyph: {
@@ -208,7 +239,7 @@
             });
 
             $("#searchbutton").on('click', function () {
-                // console.log("triggering doSearch!");
+                console.log("triggering doSearch!");
                 $("#searchform").trigger('doSearch');
             })
 
@@ -262,12 +293,15 @@
                 //console.log("decorateElementWithPopover: "  + elem);
                 if (jQuery(elem).popover) {
                     jQuery(elem).attr('rel', 'popover');
+
+                    //console.log("caption = " + caption);
                     jQuery(elem).popover({
                             html: true,
                             content: function () {
-                                var caption = ((caption) ? caption : "");
-                                var popover = "<div class='kmap-path'>/" + path + "</div>" + caption +
+                               caption = ((caption) ? caption : "");
+                                var popover = "<div class='kmap-path'>/" + path + "</div>" + "<div class='kmap-caption'>" + caption + "</div>" +
                                     "<div class='info-wrap' id='infowrap" + key + "'><div class='counts-display'>...</div></div>";
+                                //console.log("Captioning: " + caption);
                                 return popover;
                             },
                             title: function () {
@@ -339,7 +373,7 @@
                                 var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
                                 // console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
-                                    console.log(json);
+                                    //console.log(json);
                                     var updates = {};
                                     var data = JSON.parse(json);
                                     $.each(data.grouped.asset_type.groups, function (x, y) {
@@ -418,7 +452,9 @@
                             type: 'throbber'
                         }
                     };
+
                     // console.log("Adding to ajax to " + base);
+
                     Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
                     //this.click(function () {
                     //    console.log("pushing state for " + url);
@@ -533,7 +569,7 @@
                         var path = "<div class='kmap-path'>/" + $.makeArray(doc.ancestors.map(function (x) {
                                 return x;
                             })).join("/") + "</div>";
-                        var caption = ((doc.caption_eng) ? doc.caption_eng : "");
+                        var caption = $((doc.caption_eng) ? doc.caption_eng[0] : "").text();
                         var localid = doc.id.replace('subjects-', '').replace('places-', ''); // shave the kmaps name from the id.
                         var kmapid = "<span class='kmapid-display'>" + localid + "</span>";
                         var lazycounts = "<div class='counts-display'>" +
@@ -552,6 +588,8 @@
                         output += '<td kid="'+ localid +'"><span>' + doc.header + ' </span></td>';
                         output += '<td id="links_' + localid + '" kid="' + localid + '" class="links"><span>' + info + '</span></td>';
                         output += '</tr>';
+
+
 
                         var elem = $(output);
                         decorateElementWithPopover(elem, localid, doc.header, $.makeArray(doc.ancestors.map(function (x) {
@@ -577,6 +615,43 @@
 
                 Settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
 
+
+                // Faceted browsing for feature_types
+                AjaxSolr.FacetWidget = AjaxSolr.AbstractFacetWidget.extend({
+                    afterRequest: function () {
+                        if (this.manager.response.facet_counts.facet_fields[this.field] === undefined) {
+                            $(this.target).html('no items found in current selection');
+                            return;
+                        }
+
+                        var maxCount = 0;
+                        var objectedItems = [];
+                        for (var facet in this.manager.response.facet_counts.facet_fields[this.field]) {
+                            var count = parseInt(this.manager.response.facet_counts.facet_fields[this.field][facet]);
+                            if (count > maxCount) {
+                                maxCount = count;
+                            }
+                            objectedItems.push({ facet: facet, count: count });
+                        }
+                        objectedItems.sort(function (a, b) {
+                            return a.facet < b.facet ? -1 : 1;
+                        });
+
+                        $(this.target).empty();
+                        for (var i = 0, l = objectedItems.length; i < l; i++) {
+                            var facet = objectedItems[i].facet;
+                            var count = objectedItems[i].count;
+                            $(this.target).append(
+                                $('<option></option>')
+                                    .text(facet + "(" + count + ")")
+                            );
+
+                        }
+                        $(this.target).selectpicker('refresh');
+                        // $(this.target).on('change', function(x) {  alert(x)})
+                    }
+                });
+
                 Manager = new AjaxSolr.Manager({
                     solrUrl: termidx + "/"
                 });
@@ -599,6 +674,15 @@
                 Manager.store.addByValue('fq', 'tree:' + Settings.type);
                 Manager.store.addByValue('sort', 'header asc');
                 Manager.store.addByValue('df', 'name');
+                Manager.store.addByValue('facet.field', [ 'feature_types'] );
+                Manager.store.addByValue('facet', true );
+                Manager.store.addByValue('facet.limit', 300);
+                Manager.store.addByValue('facet.mincount', 1);
+                Manager.store.addByValue('facet.mincount', 1);
+                Manager.store.addByValue('json.nl', 'map');
+                //Manager.store.addByValue('hl','true');
+                //Manager.store.addByValue('hl.fl','name*');
+
                 // Manager.doRequest();
 
                 Manager.addWidget(new AjaxSolr.PagerWidget({
@@ -619,7 +703,11 @@
                 }));
 
 
-
+                Manager.addWidget(new AjaxSolr.FacetWidget({
+                    id: 'feature_types',
+                    target: '#feature_types',
+                    field: 'feature_types'
+                }));
 
             });
             var kms = $("#searchform"); // the main search input
