@@ -118,41 +118,24 @@
                 },
                 renderNode: function (event, data) {
                     data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
-                    //console.log("renderNode: " + $(data.node.span).val());
-                    //console.dir(data);
-                    //
-                    //console.log("Status Node? " + data.node.isStatusNode());
-                    //console.log("Loading? " + data.node.isLoading());
-
-                    //console.log(JSON.stringify(event) + ": " + data.node.statusNodeType);
-
                     if (!data.node.isStatusNode()) {
-
-                        //console.log("STATUS NODE: " + data.node.isStatusNode());
                         data.node.span.childNodes[2].innerHTML = '<span id="ajax-id-' + data.node.key + '">' + data.node.title + '</span>';
                         var path = $.makeArray(data.node.getParentList(false, true).map(function (x) {
                             return x.title;
                         })).join("/");
-
 
                         decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
                         $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
                             var base = $(this).attr('id');
                             var argument = $(this).attr('argument');
                             var url = location.origin + location.pathname.substring(0, location.pathname.indexOf(Settings.type)) + Settings.type + '/' + data.node.key + '/overview/nojs';
-
-                            var element_settings = {
+                            Drupal.ajax[base] = new Drupal.ajax(base, this, {
                                 url: url,
                                 event: 'navigate',
                                 progress: {
                                     type: 'throbber'
                                 }
-                            };
-                            Drupal.ajax[base] = new Drupal.ajax(base, this, element_settings);
-                            //this.click(function () {
-                            //    console.log("pushing state for " + url);
-                            //    window.history.pushState({tag: true}, null, url);
-                            //});
+                            });
                         });
                     }
 
@@ -371,7 +354,7 @@
                                     console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase);
                                 }
                                 var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
-                                // console.log ("solrURL = " + solrURL);
+                                console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
                                     //console.log(json);
                                     var updates = {};
@@ -486,6 +469,9 @@
                         }
                     );
 
+                    Manager.clearSearch();
+                    AjaxSolr.FacetWidget.clear();
+
                 }
             };
 
@@ -569,7 +555,7 @@
                         var path = "<div class='kmap-path'>/" + $.makeArray(doc.ancestors.map(function (x) {
                                 return x;
                             })).join("/") + "</div>";
-                        var caption = $((doc.caption_eng) ? doc.caption_eng[0] : "").text();
+                        var caption = $("<span/>").html((doc.caption_eng) ? doc.caption_eng[0] : "").text();
                         var localid = doc.id.replace('subjects-', '').replace('places-', ''); // shave the kmaps name from the id.
                         var kmapid = "<span class='kmapid-display'>" + localid + "</span>";
                         var lazycounts = "<div class='counts-display'>" +
@@ -619,6 +605,7 @@
                 // Faceted browsing for feature_types
                 AjaxSolr.FacetWidget = AjaxSolr.AbstractFacetWidget.extend({
                     afterRequest: function () {
+                        var facetwidget = this;
                         if (this.manager.response.facet_counts.facet_fields[this.field] === undefined) {
                             $(this.target).html('no items found in current selection');
                             return;
@@ -642,13 +629,53 @@
                             var facet = objectedItems[i].facet;
                             var count = objectedItems[i].count;
                             $(this.target).append(
-                                $('<option></option>')
+                                $('<option></option>').attr('value',facet).attr('id',"facet" + facet)
                                     .text(facet + "(" + count + ")")
                             );
 
                         }
                         $(this.target).selectpicker('refresh');
-                        // $(this.target).on('change', function(x) {  alert(x)})
+                        var oink = $(this.target);
+                        $(this.target).on('change', function(x) {
+
+                            var turds = $("#feature_types>option:checked").map(function(){ return $(this).attr('value') });
+                            console.log("WHOOPIE: ");
+                            facetwidget.clear();
+                            //var ft = [];
+                            //
+                            //
+                            ////$.each(turds, function() {
+                            //    var s = this.toString();
+                            //    ft.push(s);
+                            //});
+                            //
+                            //var fq = ft.join(' OR feature_types:');
+                            //
+                            //console.log("FQ:  "+ fq);
+                            facetwidget.or(turds);
+
+                           console.log($("#feature_types").html());
+                        });
+                    },
+
+                    /**
+                     * Sets the filter query with OR logic.
+                     *
+                     * @returns {Boolean} Whether the selection changed.
+                     */
+                    or: function (values) {
+                        return this.changeSelection(function () {
+                            var a = this.manager.store.removeByValue('fq', new RegExp('^-?' + this.field + ':'));
+                            var q = "";
+                            for (var i = 0; i < values.length; i++) {
+                                if (q.length > 0) {
+                                    q += " OR ";
+                                }
+                                q += this.fq(values[i]);
+                            }
+                            var b = this.manager.store.addByValue('fq', q);
+                            return a || b;
+                        });
                     }
                 });
 
