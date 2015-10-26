@@ -33,7 +33,7 @@
 
                 <div id="notification-wrapper"></div>
 
-                <section class="advanced-view" style="display:none;">
+                <section class="advanced-view">
                     <div class="form-group" id="searchScopeGroup">
                         <label class="radio-inline" for="scopeAll">
                             <input type="radio" name="scope" id="scopeAll" value="all" checked="checked">
