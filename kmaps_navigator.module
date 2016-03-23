@@ -54,7 +54,9 @@ function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
     libraries_load('fancytree','source');
     //error_log("loading ajaxsolr: " . print_r(libraries_load('ajaxsolr'), true));
     libraries_load('ajaxsolr');
-		
+    error_log("loading shanti_kmaps_tree: " . print_r(libraries_load('shanti_kmaps_tree'), true));
+    error_log("loading shanti_kmaps_typeahead: " . print_r(libraries_load('shanti_kmaps_typeahead'), true));
+
     drupal_add_js(drupal_get_path('module', 'kmaps_navigator') . "/js/kmaps_navigator.js",array(
             'group' => JS_THEME,
         ));

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="kmaps_navigator" createEmptyFolders="true" traceLevel="DETAILS">
+  <component name="PublishConfigData" autoUpload="Always" serverName="mandala local" createEmptyFolders="true" traceLevel="DETAILS">
     <serverData>
-      <paths name="kmaps_navigator">
+      <paths name="mandala local">
         <serverdata>
           <mappings>
             <mapping deploy="." local="$PROJECT_DIR$" web="/" />
@@ -13,4 +13,3 @@
     <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
-

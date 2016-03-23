@@ -1,13 +1,15 @@
 name = Kmaps Navigator
 description = A drupal module to provide a kmaps navigator in a block.
 core = 7.x
-package = Shanti
-dependencies[] = libraries (>=2.1)
-dependencies[] = fancytree
-dependencies[] = ajaxsolr
-; not sure if this should be here or not...  confusing!
-; scripts[]   =  js/kmaps_navigator.js
-; stylesheets[all][] = stylesheets/kmaps_navigator.css
-; scripts[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js" - the bootstrap files are already called in Sarvaka theme template file mk 12/23
-; stylesheets[all][] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" - the bootstrap files are already called in Sarvaka theme template file mk 12/23
-; stylesheets[all][] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" - the bootstrap files are already called in Sarvaka theme template file mk 12/23
+package = SHANTI
+
+configure = admin/config/content/shanti_kmaps_fields
+
+dependencies[] = jquery_update
+dependencies[] = shanti_kmaps_admin
+dependencies[] = shanti_kmaps_typeahead
+dependencies[] = shanti_kmaps_tree
+
+files[] = shanti_kmaps_fields.module
+files[] = shanti_kmaps_fields.install
+files[] = shanti_kmaps_fields.kmaps_api.inc
