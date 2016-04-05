@@ -45,8 +45,6 @@
 
         $('#kmaps-search').once('kmaps-search').each(function() {
 
-
-
             var $typeahead = $('#searchform', this);
             var search = $typeahead.hasClass('kmap_no_search') ? false : true;
             var search_key = '';
@@ -55,8 +53,8 @@
             var $tree = $('#tree');
             var admin = settings.shanti_kmaps_admin;
 
-            console.dir(settings);
-            console.log(JSON.stringify(settings, undefined, 2));
+            //console.dir(settings);
+            //console.log(JSON.stringify(settings, undefined, 2));
 
             var domain = (settings.kmaps_explorer)?settings.kmaps_explorer.app:'places';
             var root_kmap_path = domain == 'subjects' ? admin.shanti_kmaps_admin_root_subjects_path : admin.shanti_kmaps_admin_root_places_path;
@@ -76,8 +74,10 @@
                 var domain = (Drupal.settings.kmaps_explorer)?Drupal.settings.kmaps_explorer.app:"places";
                 console.dir(ev);
                 console.dir(data);
+                console.log(root_kmapid);
                 Drupal.ajax["ajax-id-" + root_kmapid].createAction( data.key , domain);
-
+                ev.stopImmediatePropagation();
+                return false;
             });
 
             if (search) {
@@ -108,9 +108,9 @@
                                 }),
                                 function () {
                                     // mark already picked items - do it more efficiently?
-                                    for (var kmap_id in picked[my_field]) {
-                                        $('#ajax-id-' + kmap_id.substring(1), $tree).addClass('picked');
-                                    }
+                                    //for (var kmap_id in picked[my_field]) {
+                                    //    $('#ajax-id-' + kmap_id.substring(1), $tree).addClass('picked');
+                                    //}
                                     // scroll to top - doesn't work
                                     $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
                                 }
@@ -123,10 +123,8 @@
                     }
                 ).bind('typeahead:select',
                     function (ev, suggestion) {
-                        pickTypeaheadSuggestion(my_field, suggestion);
                         var id = suggestion.doc.id.substring(suggestion.doc.id.indexOf('-') + 1);
-                        $('#ajax-id-' + id, $('#' + my_field + '_lazy_tree')).addClass('picked');
-                        $typeahead.typeahead('val', search_key); //reset search term
+                        console.log(JSON.stringify(suggestion,undefined,2));
                     }
                 ).bind('typeahead:cursorchange',
                     function (ev, suggestion) {
@@ -185,7 +183,6 @@
                     leavesOnly: false
                 },
                 activate: function (event, data) {
-
                     //console.log("ACTIVATE:");
                     //console.dir(data);
 
@@ -487,7 +484,7 @@
                                         var asset_count = y.doclist.numFound;
                                         updates[asset_type] = asset_count;
                                     });
-                                    // console.log(key + "(" + title + ") : " + JSON.stringify(updates));
+                                     //console.log(key + "(" + title + ") : " + JSON.stringify(updates));
                                     update_counts(countsElem, updates)
                                 });
                             }
@@ -543,7 +540,7 @@
                 return elem;
             };
 
-            function decorateElemWithDrupalAjax(theElem, theKey, theType) {
+            /*function decorateElemWithDrupalAjax(theElem, theKey, theType) {
                 //console.log("decorateElementWithDrupalAjax: "  + $(theElem).html());
                 $(theElem).once('nav', function () {
                     //console.log("applying click handling to " + $(this).html());
@@ -567,7 +564,7 @@
                     //    window.history.pushState({tag: true}, null, url);
                     //});
                 });
-            };
+            };*/
 
             var searchUtil = {
                 clearSearch: function () {
@@ -879,12 +876,17 @@
     Drupal.ajax.prototype.executeAction = function () {
         var ajax = this;
 
+
+        // return false;
+
         // hey buzz off, we're already busy!
         if (ajax.ajaxing) {
+            //console.log("WE ARE ALREADY EXECUTING")
             return false;
         }
 
         try {
+            //console.log("WE ARE AJAXING")
             $.ajax(ajax.options);
         }
         catch(err) {
@@ -900,16 +902,23 @@
 
     Drupal.ajax.prototype.createAction = function ($id, $app) {
         var admin = Drupal.settings.shanti_kmaps_admin;
-        var domain = (Drupal.settings.kmaps_explorer)?Drupal.settings.kmaps_explorer.app:"places";
+        var domain = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
         var baseUrl = Drupal.settings.basePath;
 
+
+        // probably should prevent regenerating an ajax action that already exists... Maybe using . once()?
         var settings = {
             url: baseUrl + '/' + $app + '/' + $id + '/overview/ajax',
             event: 'click',
             keypress: false,
             prevent: false
         }
-        Drupal.ajax['navigate-' + $app + '-' + $id] = new Drupal.ajax(null,$(document.body), settings);
+
+        if (!Drupal.ajax['navigate-' + $app + '-' + $id]) {
+            //console.error("Adding ajax to navigate-" + $app + '-' + $id);
+            Drupal.ajax['navigate-' + $app + '-' + $id] = new Drupal.ajax(null, $('<br/>'), settings);
+        }
+        //console.error("Executing action navigate-" + $app + '-' + $id);
         Drupal.ajax['navigate-' + $app + '-' + $id].executeAction();
     }
 
