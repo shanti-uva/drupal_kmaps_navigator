@@ -10,7 +10,6 @@
 
     $.fn.overlayMask = function (action) {
         var mask = this.find('.overlay-mask');
-
         // Create the required mask
         if (!mask.length) {
             mask = $('<div class="overlay-mask"><div class="loading-container"><div class="loading"></div><div id="loading-text">Searching&#133;</div></div></div>');
@@ -43,15 +42,118 @@
 
   Drupal.behaviors.kmaps_navigator = {
     attach: function (context, settings) {
-        // add a new function overlayMask
 
+        $('#kmaps-search').once('kmaps-search').each(function() {
+
+            var $typeahead = $('#searchform', this);
+            var search = $typeahead.hasClass('kmap_no_search') ? false : true;
+            var search_key = '';
+
+            var my_field = $typeahead.attr('id').replace('_search_term', '');
+            var $tree = $('#tree');
+            var admin = settings.shanti_kmaps_admin;
+
+            //console.dir(settings);
+            //console.log(JSON.stringify(settings, undefined, 2));
+
+            var domain = (settings.kmaps_explorer)?settings.kmaps_explorer.app:'places';
+            var root_kmap_path = domain == 'subjects' ? admin.shanti_kmaps_admin_root_subjects_path : admin.shanti_kmaps_admin_root_places_path;
+            var base_url = domain == 'subjects' ? admin.shanti_kmaps_admin_server_subjects : admin.shanti_kmaps_admin_server_places;
+            var root_kmapid = domain == 'subjects' ? admin.shanti_kmaps_admin_root_subjects_id : admin.shanti_kmaps_admin_root_places_id
+
+            ////   RECONFIGURE HERE!
+
+            $tree.kmapsTree({
+                termindex_root: admin.shanti_kmaps_admin_server_solr_terms,
+                kmindex_root: admin.shanti_kmaps_admin_server_solr,
+                type: domain,
+                root_kmap_path: root_kmap_path,
+                baseUrl: base_url
+            }).on('useractivate', function (ev, data) {
+
+                var domain = (Drupal.settings.kmaps_explorer)?Drupal.settings.kmaps_explorer.app:"places";
+                console.dir(ev);
+                console.dir(data);
+                console.log(root_kmapid);
+                Drupal.ajax["ajax-id-" + root_kmapid].createAction( data.key , domain);
+                ev.stopImmediatePropagation();
+                return false;
+            });
+
+            if (search) {
+                $typeahead.kmapsTypeahead({
+                    menu: $('#' + my_field + '_menu_wrapper'),
+                    term_index: admin.shanti_kmaps_admin_server_solr_terms,
+                    domain: domain,
+                    root_kmapid: root_kmapid,
+                    max_terms: 999,
+                    min_chars: 1,
+                    //empty_query: 'level_i:2',
+                    //empty_query: 'id:' + widget.domain + '-' + root_kmapid,
+                    //empty_sort: 'level_i ASC',
+                    empty_limit: 10,
+                    filters: admin.shanti_kmaps_admin_solr_filter_query ? admin.shanti_kmaps_admin_solr_filter_query : '',
+                    no_results_msg: 'Showing the whole tree.'
+                }).kmapsTypeahead('onSuggest',
+                    function (suggestions) {
+                        if (suggestions.length == 0) {
+                            $tree.kmapsTree('reset', function() {
+                                $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
+                            });
+                        }
+                        else {
+                            $tree.kmapsTree('showPaths',
+                                $.map(suggestions, function (val) {
+                                    return '/' + val['doc']['ancestor_id_path'];
+                                }),
+                                function () {
+                                    // mark already picked items - do it more efficiently?
+                                    //for (var kmap_id in picked[my_field]) {
+                                    //    $('#ajax-id-' + kmap_id.substring(1), $tree).addClass('picked');
+                                    //}
+                                    // scroll to top - doesn't work
+                                    $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
+                                }
+                            );
+                        }
+                    }
+                ).bind('typeahead:asyncrequest',
+                    function () {
+                        search_key = $typeahead.typeahead('val'); //get search term
+                    }
+                ).bind('typeahead:select',
+                    function (ev, suggestion) {
+                        var id = suggestion.doc.id.substring(suggestion.doc.id.indexOf('-') + 1);
+                        console.log(JSON.stringify(suggestion,undefined,2));
+                    }
+                ).bind('typeahead:cursorchange',
+                    function (ev, suggestion) {
+                        if (typeof suggestion != 'undefined') {
+                            var tree = $tree.fancytree('getTree');
+                            var id = suggestion.doc.id.substring(suggestion.doc.id.indexOf('-') + 1);
+                            tree.activateKey(id);
+                            tree.getNodeByKey(id).scrollIntoView();
+                        }
+                    }
+                ).on('input',
+                    function () {
+                        if (this.value == '') {
+                            search_key = '';
+                            $tree.kmapsTree('reset', function() {
+                                $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
+                            });
+                        }
+                    }
+                );
+            }
+        /*
         $('#kmaps-search').once('fancytree', function () {
             var theType = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
 
             // Root redirect to "places"
             if (window.location.pathname === Drupal.settings.basePath) {
                 var loc = Drupal.settings.basePath + theType;
-                console.log("REDIRECTING TO " +  loc);
+                console.log("REDIRECTING TO " + loc);
                 window.location.href = loc;
             }
 
@@ -81,7 +183,6 @@
                     leavesOnly: false
                 },
                 activate: function (event, data) {
-
                     //console.log("ACTIVATE:");
                     //console.dir(data);
 
@@ -111,7 +212,7 @@
                     var theTitle = data.node.title;
                     var theCaption = data.node.data.caption;
 
-                    decorateElementWithPopover(theElem, theKey,theTitle, path,theCaption );
+                    decorateElementWithPopover(theElem, theKey, theTitle, path, theCaption);
                     decorateElemWithDrupalAjax(theElem, theKey, theType);
 
                     return data;
@@ -135,7 +236,7 @@
                         })).join("/");
 
 
-                        decorateElementWithPopover(data.node.span, data.node.key,data.node.title, path, data.node.data.caption);
+                        decorateElementWithPopover(data.node.span, data.node.key, data.node.title, path, data.node.data.caption);
                         $(data.node.span).find('#ajax-id-' + data.node.key).once('nav', function () {
                             var base = $(this).attr('id');
                             var argument = $(this).attr('argument');
@@ -193,44 +294,46 @@
                 focus: function (event, data) {
                     data.node.scrollIntoView(true);
                 },
-                create: function(evt,ctx) {
+                create: function (evt, ctx) {
                     //console.log("EVENT: Create");
                     //console.dir(evt);
                     //console.dir(ctx);
                 },
 
-                loadChildren: function(evt,ctx) {
+                loadChildren: function (evt, ctx) {
                     // console.log("pathname = " + window.location.pathname);
                     // console.log("baseType = "  + Drupal.settings.basePath + Settings.type);
 
 
-
                     //if (window.location.pathname === Drupal.settings.basePath + Settings.type) {
-                        //console.dir(Drupal);
-                        //console.log("EVENT: loadChildren");
-                        //console.dir(evt);
-                        //console.dir(ctx);
+                    //console.dir(Drupal);
+                    //console.log("EVENT: loadChildren");
+                    //console.dir(evt);
+                    //console.dir(ctx);
 
-                        //console.log("YEERT: " + Settings.type);
-                        var startId = Drupal.settings.shanti_kmaps_admin['shanti_kmaps_admin_root_' + Settings.type + '_id'];
+                    //console.log("YEERT: " + Settings.type);
+                    var startId = Drupal.settings.shanti_kmaps_admin['shanti_kmaps_admin_root_' + Settings.type + '_id'];
 
-                        if (startId) {
-                            //ctx.tree.activateKey(startId);
-                            var startNode = ctx.tree.getNodeByKey(startId);
-                            if (startNode) {
-                                console.log("autoExpanding node: " + startNode.title + " (" + startNode.key + ")");
-                                try {
-                                    startNode.setExpanded(true);
-                                    startNode.makeVisible();
-                                } catch( e ) { console.err ("autoExpand failed")}
+                    if (startId) {
+                        //ctx.tree.activateKey(startId);
+                        var startNode = ctx.tree.getNodeByKey(startId);
+                        if (startNode) {
+                            console.log("autoExpanding node: " + startNode.title + " (" + startNode.key + ")");
+                            try {
+                                startNode.setExpanded(true);
+                                startNode.makeVisible();
+                            } catch (e) {
+                                console.err("autoExpand failed")
                             }
                         }
+                    }
                     //}
                 },
                 cookieId: "kmaps1tree", // set cookies for search-browse tree, the first fancytree loaded
                 idPrefix: "kmaps1tree"
             });
 
+*/
             $('.advanced-link').click(function () {
                 $(this).toggleClass("show-advanced", 'fast');
                 $(".advanced-view").slideToggle('fast');
@@ -298,7 +401,7 @@
                     jQuery(elem).popover({
                             html: true,
                             content: function () {
-                               caption = ((caption) ? caption : "");
+                                caption = ((caption) ? caption : "");
                                 var popover = "<div class='kmap-path'>/" + path + "</div>" + "<div class='kmap-caption'>" + caption + "</div>" +
                                     "<div class='info-wrap' id='infowrap" + key + "'><div class='counts-display'>...</div></div>";
                                 //console.log("Captioning: " + caption);
@@ -326,7 +429,7 @@
 
                         $.ajax({
                             type: "GET",
-                            url: Settings.baseUrl + "/features/" + key + ".xml",
+                            url: settings.baseUrl + "/features/" + key + ".xml",
                             dataType: "xml",
                             timeout: 90000,
                             beforeSend: function () {
@@ -336,20 +439,20 @@
                                 countsElem.html("<i class='glyphicon glyphicon-warning-sign' title='" + e.statusText);
                             },
                             success: function (xml) {
-                                Settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
+                                settings.type = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
 
                                 // force the counts to be evaluated as numbers.
                                 var related_count = Number($(xml).find('related_feature_count').text());
-                                var description_count =  Number($(xml).find('description_count').text());
-                                var place_count =  Number($(xml).find('place_count').text());
+                                var description_count = Number($(xml).find('description_count').text());
+                                var place_count = Number($(xml).find('place_count').text());
                                 var picture_count = Number($(xml).find('picture_count').text());
                                 var video_count = Number($(xml).find('video_count').text());
                                 var document_count = Number($(xml).find('document_count').text());
                                 var subject_count = Number($(xml).find('subject_count').text());
 
-                                if (Settings.type === "places") {
+                                if (settings.type === "places") {
                                     place_count = related_count;
-                                } else if (Settings.type === "subjects") {
+                                } else if (settings.type === "subjects") {
                                     subject_count = related_count;
                                 }
                                 countsElem.html("");
@@ -364,13 +467,13 @@
 
                                 var fq = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_solr_filter_query;
 
-                                var project_filter = (fq)?("&" + fq):"";
+                                var project_filter = (fq) ? ("&" + fq) : "";
                                 var kmidxBase = Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr;
                                 if (!kmidxBase) {
                                     kmidxBase = 'http://kidx.shanti.virginia.edu/solr/kmindex';
                                     console.error("Drupal.settings.shanti_kmaps_admin.shanti_kmaps_admin_server_solr not defined. using default value: " + kmidxBase);
                                 }
-                                var solrURL = kmidxBase + '/select?q=kmapid:' + Settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
+                                var solrURL = kmidxBase + '/select?q=kmapid:' + settings.type + '-' + key + project_filter + '&start=0&facets=on&group=true&group.field=asset_type&group.facet=true&group.ngroups=true&group.limit=0&wt=json';
                                 // console.log ("solrURL = " + solrURL);
                                 $.get(solrURL, function (json) {
                                     //console.log(json);
@@ -381,7 +484,7 @@
                                         var asset_count = y.doclist.numFound;
                                         updates[asset_type] = asset_count;
                                     });
-                                    // console.log(key + "(" + title + ") : " + JSON.stringify(updates));
+                                     //console.log(key + "(" + title + ") : " + JSON.stringify(updates));
                                     update_counts(countsElem, updates)
                                 });
                             }
@@ -437,7 +540,7 @@
                 return elem;
             };
 
-            function decorateElemWithDrupalAjax(theElem, theKey, theType) {
+            /*function decorateElemWithDrupalAjax(theElem, theKey, theType) {
                 //console.log("decorateElementWithDrupalAjax: "  + $(theElem).html());
                 $(theElem).once('nav', function () {
                     //console.log("applying click handling to " + $(this).html());
@@ -447,7 +550,7 @@
 
                     var element_settings = {
                         url: url,
-                        event:  'navigate',
+                        event: 'navigate',
                         progress: {
                             type: 'throbber'
                         }
@@ -461,7 +564,7 @@
                     //    window.history.pushState({tag: true}, null, url);
                     //});
                 });
-            };
+            };*/
 
             var searchUtil = {
                 clearSearch: function () {
@@ -517,7 +620,8 @@
             }
             // SOLR AJAX
             // Adding all the "widgets" to the manager and attaching them to dom elements.
-
+        //
+        /*
             var Manager;
             $(function () {
 
@@ -585,18 +689,19 @@
                         var info = (doc.feature_types) ? doc.feature_types[0] : doc.ancestors[0];
 
                         var output = '<tr id="ajax-tr-id-' + localid + '" >';
-                        output += '<td kid="'+ localid +'"><span>' + doc.header + ' </span></td>';
+                        output += '<td kid="' + localid + '"><span>' + doc.header + ' </span></td>';
                         output += '<td id="links_' + localid + '" kid="' + localid + '" class="links"><span>' + info + '</span></td>';
                         output += '</tr>';
-
 
 
                         var elem = $(output);
                         decorateElementWithPopover(elem, localid, doc.header, $.makeArray(doc.ancestors.map(function (x) {
                             return x;
                         })).join("/"), caption);
-                        decorateElemWithDrupalAjax(elem,localid,Settings.type);
-                        $(elem).on('click',function() {$(elem).trigger('navigate');})
+                        decorateElemWithDrupalAjax(elem, localid, Settings.type);
+                        $(elem).on('click', function () {
+                            $(elem).trigger('navigate');
+                        })
                         return elem;
                     }
                 });
@@ -631,7 +736,7 @@
                             if (count > maxCount) {
                                 maxCount = count;
                             }
-                            objectedItems.push({ facet: facet, count: count });
+                            objectedItems.push({facet: facet, count: count});
                         }
                         objectedItems.sort(function (a, b) {
                             return a.facet < b.facet ? -1 : 1;
@@ -674,8 +779,8 @@
                 Manager.store.addByValue('fq', 'tree:' + Settings.type);
                 Manager.store.addByValue('sort', 'header asc');
                 Manager.store.addByValue('df', 'name');
-                Manager.store.addByValue('facet.field', [ 'feature_types'] );
-                Manager.store.addByValue('facet', true );
+                Manager.store.addByValue('facet.field', ['feature_types']);
+                Manager.store.addByValue('facet', true);
                 Manager.store.addByValue('facet.limit', 300);
                 Manager.store.addByValue('facet.mincount', 1);
                 Manager.store.addByValue('facet.mincount', 1);
@@ -710,6 +815,8 @@
                 }));
 
             });
+    */
+
             var kms = $("#searchform"); // the main search input
             $(kms).data("holder", $(kms).attr("placeholder"));
 
@@ -750,7 +857,7 @@
 
             // iCheck fixup -- added by gketuma
             $('nav li.form-group input[name=option2]').on('ifChecked', function (e) {
-                var newSource = Settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val();
+                var newSource = settings.baseUrl + "/features/fancy_nested.json?view_code=" + $('nav li.form-group input[name=option2]:checked').val();
                 $("#tree").fancytree("option", "source.url", newSource);
             });
 
@@ -760,7 +867,60 @@
                 return false;
             });
         }); // end of once
-    }//end of attach
+    }
+      //end of attach
   };
+
+
+    // Custom method to execute this ajax action...
+    Drupal.ajax.prototype.executeAction = function () {
+        var ajax = this;
+
+
+        // return false;
+
+        // hey buzz off, we're already busy!
+        if (ajax.ajaxing) {
+            //console.log("WE ARE ALREADY EXECUTING")
+            return false;
+        }
+
+        try {
+            //console.log("WE ARE AJAXING")
+            $.ajax(ajax.options);
+        }
+        catch(err) {
+            console.error("Could not process process: "  + ajax.options.url);
+            console.dir (ajax.options);
+            return false;
+        }
+
+        return false;
+    }
+
+    // Create the custom actions and execute it
+
+    Drupal.ajax.prototype.createAction = function ($id, $app) {
+        var admin = Drupal.settings.shanti_kmaps_admin;
+        var domain = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
+        var baseUrl = Drupal.settings.basePath;
+
+
+        // probably should prevent regenerating an ajax action that already exists... Maybe using . once()?
+        var settings = {
+            url: baseUrl + '/' + $app + '/' + $id + '/overview/ajax',
+            event: 'click',
+            keypress: false,
+            prevent: false
+        }
+
+        if (!Drupal.ajax['navigate-' + $app + '-' + $id]) {
+            //console.error("Adding ajax to navigate-" + $app + '-' + $id);
+            Drupal.ajax['navigate-' + $app + '-' + $id] = new Drupal.ajax(null, $('<br/>'), settings);
+        }
+        //console.error("Executing action navigate-" + $app + '-' + $id);
+        Drupal.ajax['navigate-' + $app + '-' + $id].executeAction();
+    }
+
 
 })(jQuery);

@@ -24,15 +24,17 @@
                     </div>
 
                     <!-- search scope -->
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>
                         <label class="checkbox-inline" ><input type="checkbox" id="essayscope" name="essay-scope" data-value="essays">Essays</label>
                         <a href="#" class="advanced-link toggle-link"><span class="icon"></span>Advanced</a>
                     </div>
-                </div><!-- END search group -->
+                </div>
+                -->
 
-                <div id="notification-wrapper"></div>
+<!--                <div id="notification-wrapper"></div> -->
 
+                <!--
                 <section class="advanced-view">
                     <div class="form-group" id="searchScopeGroup">
                         <label class="radio-inline" for="scopeAll">
@@ -54,11 +56,11 @@
                             <input type="radio" name="anchor" id="anchorExact" value="exact">
                             Exactly</label>
                     </div>
-
+-->
 
 
                     <!-- feature 1 type -->
-                    <div class="form-group advanced-input feature-group dropdown">
+ <!--                   <div class="form-group advanced-input feature-group dropdown">
                         <span class="filter type"><label>Filter:</label> <span id="matches1"></span></span>
                         <input class="form-control feature-type" id="feature-type" name="feature-type" type="text" placeholder="Filter by Feature Type">
                         <button id="feature1a-reset" class="feature-reset"><span class="icon"></span></button>
@@ -67,7 +69,7 @@
                             <div class="tree-wrap">
 
                                 <div class="feature-container">
-                                    <div id="feature-tree1"></div> <!-- features tree, under construction -->
+                                    <div id="feature-tree1"></div>
                                 </div>
 
                                 <div class="feature-submit">
@@ -76,12 +78,12 @@
                                 </div>
 
                             </div>
-                        </div> <!-- END dropdown-menu -->
-                    </div> <!-- END feature-group -->
-
+                        </div>
+                    </div>
+--->
 
                     <!-- feature 2 subject -->
-                    <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
+<!--                    <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
                         <span class="filter subject"><label>Filter:</label> <span id="matches2"></span></span>
                         <input class="form-control feature-subject" id="feature-subject" name="feature-subject" type="text" placeholder="Filter by Feature Subject">
                         <button id="feature2a-reset" class="feature-reset"><span class="icon"></span></button>
@@ -90,7 +92,7 @@
                             <div class="tree-wrap">
 
                                 <div class="feature-container">
-                                    <div id="feature-tree2"></div> <!-- features tree, under construction -->
+                                    <div id="feature-tree2"></div>
                                 </div>
 
                                 <div class="feature-submit">
@@ -99,12 +101,11 @@
                                 </div>
 
                             </div>
-                        </div> <!-- END dropdown-menu -->
-                    </div> <!-- END feature-group -->
-
-
+                        </div>
+                    </div>
+                    -->
                     <!-- feature 3 region -->
-                    <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
+ <!--                   <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
                         <span class="filter region"><label>Filter:</label> <span id="matches3"></span></span>
                         <input class="form-control feature-region" id="feature-region" name="feature-region" type="text" placeholder="Filter by Feature Region">
                         <button id="feature3a-reset" class="feature-reset"><span class="icon"></span></button>
@@ -113,7 +114,7 @@
                             <div class="tree-wrap">
 
                                 <div class="feature-container">
-                                    <div id="feature-tree3"></div> <!-- features tree, under construction -->
+                                    <div id="feature-tree3"></div>
                                 </div>
 
                                 <div class="feature-submit">
@@ -122,10 +123,11 @@
                                 </div>
 
                             </div>
-                        </div> <!-- END dropdown-menu -->
-                    </div> <!-- END feature-group -->
+                        </div>
+                        -
+                    </div> --> <!-- END feature-group -->
 
-
+                    <!--
                     <div class="form-group advanced-input select-type" >
                         <span>Show only results containing:</span>
                         <select class="selectpicker" id="selector1" name="selector1" data-selected-text-format="count" data-header="Select one or <b>more...</b>" data-width="100%" multiple >
@@ -154,14 +156,12 @@
                                 <option>Essays</option>
                             </select>
                         </div>
-                    </div>
-
-
-
+                    </div> -->
 
                 </section><!-- END advanced section -->
             </fieldset>
         </form>
+
     </section> <!-- END input section -->
 
     <!-- BEGIN view section -->
