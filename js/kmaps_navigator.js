@@ -905,10 +905,14 @@
         var domain = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
         var baseUrl = Drupal.settings.basePath;
 
+        // append terminal slash if there isn't one.
+        if (/\/$/.test(baseUrl)) {
+            baseUrl += "/";
+        }
 
         // probably should prevent regenerating an ajax action that already exists... Maybe using . once()?
         var settings = {
-            url: baseUrl + '/' + $app + '/' + $id + '/overview/ajax',
+            url: baseUrl + $app + '/' + $id + '/overview/ajax',
             event: 'click',
             keypress: false,
             prevent: false
