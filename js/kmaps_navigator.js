@@ -906,7 +906,7 @@
         var baseUrl = Drupal.settings.basePath;
 
         // append terminal slash if there isn't one.
-        if (/\/$/.test(baseUrl)) {
+        if (!/\/$/.test(baseUrl)) {
             baseUrl += "/";
         }
 
