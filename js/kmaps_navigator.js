@@ -88,10 +88,7 @@
                     root_kmapid: root_kmapid,
                     max_terms: 20,
                     min_chars: 1,
-                    //empty_query: 'level_i:2',
-                    //empty_query: 'id:' + widget.domain + '-' + root_kmapid,
-                    //empty_sort: 'level_i ASC',
-                    empty_limit: 10,
+                    pager: 'on',
                     filters: admin.shanti_kmaps_admin_solr_filter_query ? admin.shanti_kmaps_admin_solr_filter_query : '',
                     no_results_msg: 'Showing the whole tree.'
                 }).kmapsTypeahead('onSuggest',
