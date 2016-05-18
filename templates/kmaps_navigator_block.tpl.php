@@ -24,9 +24,10 @@
                     </div>
 
                     <!-- search scope -->
-<!--                    <div class="form-group">
-                        <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>
+                    <div class="form-group">
+<!--                        <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>
                         <label class="checkbox-inline" ><input type="checkbox" id="essayscope" name="essay-scope" data-value="essays">Essays</label>
+-->
                         <a href="#" class="advanced-link toggle-link"><span class="icon"></span>Advanced</a>
                     </div>
                 </div>
@@ -34,9 +35,9 @@
 
 <!--                <div id="notification-wrapper"></div> -->
 
-                <!--
+
                 <section class="advanced-view">
-                    <div class="form-group" id="searchScopeGroup">
+<!--                    <div class="form-group" id="searchScopeGroup">
                         <label class="radio-inline" for="scopeAll">
                             <input type="radio" name="scope" id="scopeAll" value="all" checked="checked">
                             All Text</label>
@@ -58,12 +59,12 @@
                     </div>
 -->
 
-
                     <!-- feature 1 type -->
- <!--                   <div class="form-group advanced-input feature-group dropdown">
-                        <span class="filter type"><label>Filter:</label> <span id="matches1"></span></span>
+                    <div class="form-group advanced-input feature-group dropdown">
+<!--                        <span class="filter type"><label>Filter:</label> <span id="matches1"></span></span>
+-->
                         <input class="form-control feature-type" id="feature-type" name="feature-type" type="text" placeholder="Filter by Feature Type">
-                        <button id="feature1a-reset" class="feature-reset"><span class="icon"></span></button>
+<!--                        <button id="feature1a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-type">
                             <div class="tree-wrap">
@@ -79,14 +80,16 @@
 
                             </div>
                         </div>
+-->
                     </div>
---->
+
 
                     <!-- feature 2 subject -->
-<!--                    <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
-                        <span class="filter subject"><label>Filter:</label> <span id="matches2"></span></span>
-                        <input class="form-control feature-subject" id="feature-subject" name="feature-subject" type="text" placeholder="Filter by Feature Subject">
-                        <button id="feature2a-reset" class="feature-reset"><span class="icon"></span></button>
+                    <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
+<!--                        <span class="filter subject"><label>Filter:</label> <span id="matches2"></span></span>
+-->
+                        <input class="form-control feature-subject" id="feature-subject" name="feature-subject" type="text" placeholder="Filter by Associated Subject">
+<!--                        <button id="feature2a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-subject">
                             <div class="tree-wrap">
@@ -102,8 +105,9 @@
 
                             </div>
                         </div>
+-->
                     </div>
-                    -->
+
                     <!-- feature 3 region -->
  <!--                   <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
                         <span class="filter region"><label>Filter:</label> <span id="matches3"></span></span>
