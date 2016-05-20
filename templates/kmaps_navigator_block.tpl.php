@@ -28,10 +28,9 @@
 <!--                        <label class="checkbox-inline"><input type="checkbox" id="summaryscope" name="summary-scope" checked="checked" data-value="summaries">Summaries</label>
                         <label class="checkbox-inline" ><input type="checkbox" id="essayscope" name="essay-scope" data-value="essays">Essays</label>
 -->
-                        <a href="#" class="advanced-link toggle-link"><span class="icon"></span>Advanced</a>
+                        <a href="#" class="advanced-link toggle-link" style="display:block;"><span class="icon"></span>Advanced</a>
                     </div>
                 </div>
-                -->
 
 <!--                <div id="notification-wrapper"></div> -->
 
@@ -59,11 +58,12 @@
                     </div>
 -->
 
-                    <!-- feature 1 type -->
-                    <div class="form-group advanced-input feature-group dropdown">
+                    <!-- feature type -->
+                    <div class="advanced-input kmap_filter form-wrapper">
 <!--                        <span class="filter type"><label>Filter:</label> <span id="matches1"></span></span>
 -->
-                        <input class="form-control feature-type" id="feature-type" name="feature-type" type="text" placeholder="Filter by Feature Type">
+                        <input id="kmaps_navigator_search_filter_feature_type" class="kmap_search_filter form-control" data-search-filter="feature_type" type="text" placeholder="Filter by Feature Type">
+                        <div id="kmaps_navigator_filter_box_feature_type" class="kmap_filter_box form-wrapper" data-search-filter="feature_type"> </div>
 <!--                        <button id="feature1a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-type">
@@ -84,11 +84,12 @@
                     </div>
 
 
-                    <!-- feature 2 subject -->
-                    <div class="form-group advanced-input feature-group dropdown" style="border-top:none;">
+                    <!-- associated subject -->
+                    <div class="advanced-input kmap_filter form-wrapper">
 <!--                        <span class="filter subject"><label>Filter:</label> <span id="matches2"></span></span>
 -->
-                        <input class="form-control feature-subject" id="feature-subject" name="feature-subject" type="text" placeholder="Filter by Associated Subject">
+                        <input id="kmaps_navigator_search_filter_associated_subject" class="kmap_search_filter form-control" data-search-filter="associated_subject" type="text" placeholder="Filter by Associated Subject">
+                        <div id="kmaps_navigator_filter_box_associated_subject" class="kmap_filter_box form-wrapper" data-search-filter="associated_subject"> </div>
 <!--                        <button id="feature2a-reset" class="feature-reset"><span class="icon"></span></button>
 
                         <div class="dropdown-menu feature-menu dropdown-subject">

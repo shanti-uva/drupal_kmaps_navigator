@@ -1,6 +1,3 @@
-
-
-
 /* yuji's search widget stuff
 	
 #pager li, .links li {
@@ -10,7 +7,57 @@
 
 */
 
-
 .advanced_view {
     display: none;
+}
+
+.kmap_filter_box .selected-kmap:not(:first-child):before {
+    content: 'OR';
+    display: inline-block;
+    width: 2.3em;
+}
+.kmap_filter_box.kmaps-conjunctive-filters .selected-kmap:not(:first-child):before {
+    content: 'AND';
+    display: inline-block;
+    width: 2.8em;
+}
+.kmap_search_filter {
+    clear: both;
+}
+
+.delete-me, .kmap-item {
+    cursor:pointer;
+}
+
+.delete-me {
+    padding: 0 5px 0 0;
+}
+
+.selected-kmap {
+    float:left;
+    color:green;
+    border-radius:3px;
+    border:1px solid gray;
+    width:auto;
+    padding:.25em .5em;
+    margin:0 .25em .25em 0;
+    background-color:white;
+}
+
+
+
+/* TAKEN FROM SARVAKA */
+
+.selected-kmap {
+    color: #555;
+    font-size: 0.93em;
+    font-family: 'museo-sans-500', helvetica, arial, sans-serif;
+    border: none;
+    padding: 0.3rem 0 0.3rem 0.8rem;
+    background-color: transparent;
+}
+
+.selected-kmap:hover {
+    color: #555;
+    background-color: transparent;
 }
