@@ -103,13 +103,13 @@
                 var $filter = $('#' + namespace + '-search-filter-' + filter_type);
                 var filter_field = filter_type + "_ids";
                 var search_key = $filter.typeahead('val'); //get search term
-                // var $typeahead = $('#' + my_field + '-search-term');
-                // KMapsUtil.removeFilters($typeahead, filter_field, filtered[my_field][filter_type]);
+                var $typeahead = $('#' + namespace + '-search-term');
+                KMapsUtil.removeFilters($typeahead, filter_field, filtered[namespace][filter_type]);
                 delete filtered[namespace][filter_type][kmap_id];
                 KMapsUtil.trackTypeaheadSelected($filter, filtered[namespace][filter_type]);
                 $filter_el.remove();
                 var fq = KMapsUtil.getFilters(filter_field, filtered[namespace][filter_type], $filter_box.hasClass('kmaps-conjunctive-filters') ? 'AND' : 'OR');
-                // $typeahead.kmapsTypeahead('addFilters', fq).kmapsTypeahead('setValue', $typeahead.typeahead('val'), false);
+                $typeahead.kmapsTypeahead('addFilters', fq).kmapsTypeahead('setValue', $typeahead.typeahead('val'), false);
                 $('#' + namespace + '-search-filter-' + other_type).kmapsTypeahead('refetchPrefetch', fq);
                 $filter.kmapsTypeahead('refacetPrefetch', fq);
                 $filter.kmapsTypeahead('setValue', search_key, false); // 'false' prevents dropdown from re-opening
@@ -122,7 +122,7 @@
                 var $filter_box = $('#kmaps-navigator-filter-box-' + filter_type);
                 var namespace = $filter_box.attr('id').replace('-filter-box-' + filter_type, '');
                 var search_key = '';
-                //var $typeahead = $('#' + namespace + '-search-term');
+                var $typeahead = $('#' + namespace + '-search-term');
                 $filter.kmapsTypeahead({
                     term_index: admin.shanti_kmaps_admin_server_solr_terms,
                     domain: 'subjects', // always Filter by Subject
@@ -141,13 +141,13 @@
                 ).bind('typeahead:select',
                     function (ev, suggestion) {
                         if (suggestion.count > 0) { // should not be able to select zero-result filters
-                            //KMapsUtil.removeFilters($typeahead, filter_field, filtered[namespace][filter_type]);
+                            KMapsUtil.removeFilters($typeahead, filter_field, filtered[namespace][filter_type]);
                             var mode = suggestion.refacet ? 'AND' : 'OR';
                             pickFilter(namespace, filter_type, suggestion);
                             $filter_box.toggleClass('kmaps-conjunctive-filters', mode == 'AND');
                             KMapsUtil.trackTypeaheadSelected($filter, filtered[namespace][filter_type]);
                             var fq = KMapsUtil.getFilters(filter_field, filtered[namespace][filter_type], mode);
-                            // $typeahead.kmapsTypeahead('addFilters', fq).kmapsTypeahead('setValue', $typeahead.typeahead('val'), false);
+                            $typeahead.kmapsTypeahead('addFilters', fq).kmapsTypeahead('setValue', $typeahead.typeahead('val'), false);
                             var other_type = (filter_type == 'feature_type') ? 'associated_subject' : 'feature_type';
                             $('#' + namespace + '-search-filter-' + other_type).kmapsTypeahead('refetchPrefetch', fq);
                             $filter.kmapsTypeahead('refacetPrefetch', fq);
@@ -159,11 +159,9 @@
 
             $('#kmaps-search', context).once('kmaps-navigator').each(function () {
 
-                var $typeahead = $('#searchform', this);
+                var $typeahead = $('#kmaps-navigator-search-term', this);
                 var search = $typeahead.hasClass('kmap-no-search') ? false : true;
                 var search_key = '';
-
-                var my_field = $typeahead.attr('id').replace('-search-term', '');
                 var $tree = $('#tree');
 
 
@@ -210,10 +208,6 @@
                                         return '/' + val['doc']['ancestor_id_path'];
                                     }),
                                     function () {
-                                        // mark already picked items - do it more efficiently?
-                                        //for (var kmap_id in picked[my_field]) {
-                                        //    $('#ajax-id-' + kmap_id.substring(1), $tree).addClass('picked');
-                                        //}
                                         // scroll to top - doesn't work
                                         $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
                                     }
@@ -446,10 +440,10 @@
 
                 $("#searchbutton").on('click', function () {
                     console.log("triggering doSearch!");
-                    $("#searchform").trigger('doSearch');
+                    $("#kmaps-navigator-search-term").trigger('doSearch');
                 })
 
-                $('#searchform').attr('autocomplete', 'off'); // turn off browser autocomplete
+                $('#kmaps-navigator-search-term').attr('autocomplete', 'off'); // turn off browser autocomplete
 
                 $('.listview').on('shown.bs.tab', function () {
 
@@ -527,7 +521,7 @@
                             var countsElem = $("#infowrap" + key + " .counts-display");
 
                             // highlight matching text (if/where they occur).
-                            var txt = $('#searchform').val();
+                            var txt = $('#kmaps-navigator-search-term').val();
                             $('.popover-caption').highlight(txt, {element: 'mark'});
 
                             $.ajax({
@@ -723,7 +717,7 @@
                 }
                 // SOLR AJAX
                 //
-                var kms = $("#searchform"); // the main search input
+                var kms = $("#kmaps-navigator-search-term"); // the main search input
                 $(kms).data("holder", $(kms).attr("placeholder"));
 
                 // --- features inputs - focusin / focusout
