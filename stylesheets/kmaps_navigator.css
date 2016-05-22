@@ -7,32 +7,30 @@
 
 */
 
-.advanced_view {
+.kmap-search-filter {
+    clear: both;
+}
+
+.advanced-view {
     display: none;
 }
 
-.kmap_filter_box .selected-kmap:not(:first-child):before {
+.kmap-filter-box .selected-kmap:not(:first-child):before {
     content: 'OR';
     display: inline-block;
     width: 2.3em;
 }
-.kmap_filter_box.kmaps-conjunctive-filters .selected-kmap:not(:first-child):before {
+.kmap-filter-box.kmaps-conjunctive-filters .selected-kmap:not(:first-child):before {
     content: 'AND';
     display: inline-block;
     width: 2.8em;
 }
-.kmap_search_filter {
-    clear: both;
-}
-
 .delete-me, .kmap-item {
     cursor:pointer;
 }
-
 .delete-me {
     padding: 0 5px 0 0;
 }
-
 .selected-kmap {
     float:left;
     color:green;
@@ -44,10 +42,7 @@
     background-color:white;
 }
 
-
-
 /* TAKEN FROM SARVAKA */
-
 .selected-kmap {
     color: #555;
     font-size: 0.93em;
