@@ -62,6 +62,7 @@
                     <div class="advanced-input kmap-filter form-wrapper">
 <!--                        <span class="filter type"><label>Filter:</label> <span id="matches1"></span></span>
 -->
+                        <label><span>Filter:</span> Select Feature Types</label>
                         <input id="kmaps-navigator-search-filter-feature_type" class="kmap-search-filter form-control" data-search-filter="feature_type" type="text" placeholder="Filter by Feature Type">
                         <div id="kmaps-navigator-filter-box-feature_type" class="kmap-filter-box form-wrapper" data-search-filter="feature_type"> </div>
 <!--                        <button id="feature1a-reset" class="feature-reset"><span class="icon"></span></button>
@@ -88,6 +89,7 @@
                     <div class="advanced-input kmap-filter form-wrapper">
 <!--                        <span class="filter subject"><label>Filter:</label> <span id="matches2"></span></span>
 -->
+                        <label><span>Filter:</span> Select Associated Subjects</label
                         <input id="kmaps-navigator-search-filter-associated_subject" class="kmap-search-filter form-control" data-search-filter="associated_subject" type="text" placeholder="Filter by Associated Subject">
                         <div id="kmaps-navigator-filter-box-associated_subject" class="kmap-filter-box form-wrapper" data-search-filter="associated_subject"> </div>
 <!--                        <button id="feature2a-reset" class="feature-reset"><span class="icon"></span></button>

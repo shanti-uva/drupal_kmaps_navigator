@@ -42,6 +42,17 @@
     background-color:white;
 }
 
+.kmap-filter label, .kmap-typeahead-picker label {
+    font-weight: normal;
+    padding-left: 1rem;
+    text-transform: capitalize;
+}
+
+.kmap-filter label span, .kmap-typeahead-picker label span {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 /* TAKEN FROM SARVAKA */
 .selected-kmap {
     color: #555;
