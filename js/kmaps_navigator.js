@@ -89,7 +89,19 @@
                                 });
                             }
                             else {
-                                $tree.kmapsTree('showPaths',
+                                var re = $typeahead.kmapsTypeahead('getResponse');
+                                if (re.response.start == 0) { // don't page the tree
+                                    $tree.kmapsTree('showPaths',
+                                        $.map(KMapsUtil.getLevelFacetResults($typeahead.kmapsTypeahead('getResponse').facet_counts.facet_fields), function (val) {
+                                            return '/' + val.path;
+                                        }),
+                                        function () {
+                                            // scroll to top - doesn't work
+                                            $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
+                                        }
+                                    );
+                                }
+                                /* $tree.kmapsTree('showPaths',
                                     $.map(suggestions, function (val) {
                                         return '/' + val['doc']['ancestor_id_path'];
                                     }),
@@ -97,8 +109,12 @@
                                         // scroll to top - doesn't work
                                         $tree.fancytree('getTree').getNodeByKey(root_kmapid).scrollIntoView(true);
                                     }
-                                );
+                                ); */
                             }
+                        }
+                    ).kmapsTypeahead('mergeParams', {
+                            'facet': true,
+                            'facet.field': KMapsUtil.getLevelFacetParams(root_kmapid, 2)
                         }
                     ).bind('typeahead:asyncrequest',
                         function () {
