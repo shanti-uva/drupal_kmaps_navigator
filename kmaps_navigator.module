@@ -119,7 +119,13 @@ function kmaps_navigator_theme() {
                         ),
                         array(
                             'ajaxsolr'
-                        )
+                        ),
+                        array(
+                            'typeahead'
+                        ),
+                        array(
+                            'shanti_kmaps_typeahead'
+                        ),
                     ),
                     'library' => array(
                         'system', 'drupal.ajax'
