@@ -60,7 +60,6 @@
                     root_kmap_path: root_kmap_path,
                     baseUrl: base_url
                 }).on('useractivate', function (ev, data) {
-
                     var domain = (Drupal.settings.kmaps_explorer) ? Drupal.settings.kmaps_explorer.app : "places";
                     console.dir(ev);
                     console.dir(data);
@@ -124,6 +123,30 @@
                         function (ev, suggestion) {
                             var id = suggestion.doc.id.substring(suggestion.doc.id.indexOf('-') + 1);
                             console.log(JSON.stringify(suggestion, undefined, 2));
+
+                            ////    INSERT NAVIGATION CODE HERE!
+
+
+
+
+
+
+
+
+
+                            Drupal.ajax["ajax-id-" + root_kmapid].createAction(id, domain);
+
+
+
+
+
+
+
+
+
+
+
+
                         }
                     ).bind('typeahead:cursorchange',
                         function (ev, suggestion) {
