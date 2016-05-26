@@ -11,32 +11,13 @@ function kmaps_navigator_help($path, $arg) {
     }
 }
 
-
 /**
- * Helper function to call theme
- */
-function _kmaps_navigator_block() {
-    // error_log("_kmaps_navigator_block helper function...");
-    $block = array(
-        'subject' => '',
-        'content' => theme('kmaps_navigator_block', array(
-            'forums' => 'f', 'topics' => 't', 'parents' => 'p'
-        )),
-    );
-//    error_log("returning: " . print_r($block,true));
-    return $block;
-}
-
-/**
- * Implements hook_block_info().
- */
+* Implements hook_block_info().
+*/
 function kmaps_navigator_block_info() {
-//    error_log("kmaps_navigator_block_info()");
     $blocks['kmaps_navigator_block'] = array(
-        // The name that will appear in the block list.
         'info' => t('KMaps Navigator'),
-        // Default setting.
-        'cache' => DRUPAL_NO_CACHE   // DRUPAL_CACHE_PER_ROLE,
+        'cache' => DRUPAL_NO_CACHE,   // DRUPAL_CACHE_PER_ROLE,
     );
     return $blocks;
 }
@@ -46,44 +27,62 @@ function kmaps_navigator_block_info() {
  *
  * Prepares the contents of the block.
  */
-function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
-		// error_log("loading json2: " . print_r(libraries_load('json2'),true));
-		libraries_load('json2');
-    // Need to add debugging (the returned object from libraries_load is the only error logging you ever get)
-    //error_log("loading fancytree: " . print_r(libraries_load('fancytree','source'),true));
-    libraries_load('fancytree','source');
-    //error_log("loading ajaxsolr: " . print_r(libraries_load('ajaxsolr'), true));
-    libraries_load('ajaxsolr');
-    error_log("loading shanti_kmaps_tree: " . print_r(libraries_load('shanti_kmaps_tree'), true));
-    error_log("loading shanti_kmaps_typeahead: " . print_r(libraries_load('shanti_kmaps_typeahead'), true));
-
-
-    drupal_add_css(drupal_get_path('module', 'kmaps_navigator') . "/stylesheets/kmaps_navigator.css",array(
-        'group' => JS_THEME,
-    ));
-    drupal_add_js(drupal_get_path('module', 'kmaps_navigator') . "/js/kmaps_navigator.js",array(
-            'group' => JS_THEME,
-        ));
-    // drupal_add_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js",array('type' => 'external'));
-    // drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css",array('type' => 'external'));
-    // drupal_add_css("https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",array('type' => 'external'));
-
-    //Add Ajax library
-    drupal_add_library('system', 'drupal.ajax');
+function kmaps_navigator_block_view($delta = '') {
+    $block = array();
 
     switch ($delta) {
         case 'kmaps_navigator_block':
-//            error_log("kmaps navigator block view");
-            $block = _kmaps_navigator_block();
-//            error_log("kmaps_navigator_block_view returning: " . print_r($block,true));
-            return $block;
-            break;
-        default:
-//            error_log("WHY WHY WHY? default block_view case.  delta = " . $delta);
-            $block = _kmaps_navigator_block();
-            return $block;
+            //why?
+            drupal_add_library('system', 'drupal.ajax');
+
+            $block['subject'] = '';
+            $block['content'] = array(
+                '#markup' => theme('kmaps_navigator_block', array(
+                    'forums' => 'f',
+                    'topics' => 't',
+                    'parents' => 'p',
+                    'filters' => shanti_kmaps_admin_search_filters('kmaps_navigator'),
+                )),
+                '#attached' => array(
+                    'library' => array(
+                        'system',
+                        'drupal.ajax',
+                    ),
+                    'libraries_load' => array(
+                        array('typeahead'),
+                        array('shanti_kmaps_typeahead'),
+                        array('json2'),
+                        array('fancytree', 'source'),
+                        array('shanti_kmaps_tree'),
+                    ),
+                    'css' => array(
+                        SHANTI_KMAPS_ADMIN_PATH . "/css/shanti_kmaps_filter.css",
+                        SHANTI_KMAPS_ADMIN_PATH . "/css/shanti_kmaps_picklist.css",
+                        SHANTI_KMAPS_ADMIN_PATH . "/css/shanti_kmaps_typeahead.css",
+                        drupal_get_path('module', 'kmaps_navigator') . "/css/kmaps_navigator.css",
+                    ),
+                    'js' => array(
+                        SHANTI_KMAPS_ADMIN_PATH . "/js/shanti_kmaps_filter.js",
+                        drupal_get_path('module', 'kmaps_navigator') . "/js/kmaps_navigator.js",
+                        array(
+                            'type' => 'setting',
+                            'data' => array(
+                                'shanti_kmaps_admin' => array(
+                                    'kmaps_filter' => array(
+                                        'kmaps_navigator' => array(
+                                            'domain' => 'places',
+                                            'root_kmap_path' => '',
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            );
             break;
     }
+    return $block;
 }
 
 /**
@@ -91,53 +90,15 @@ function kmaps_navigator_block_view($delta = 'kmaps_navigator_block') {
  *
  */
 function kmaps_navigator_theme() {
-    $module_path = drupal_get_path('module', 'kmaps_navigator');
-    $base = array(
-        'path' => "{$module_path}/templates",
-    );
     $ret = array(
-        'kmaps_navigator_block' => $base + array(
-                // I could define here anything I want
-                // It would be called from inside the subpath theme in the module path
-                // as file abc.tpl.php
-                'template' => 'kmaps_navigator_block',
-                // To override I need file
-                // 'block--<MODULE_NAME>--<DELTA>.tpl.php'
-                // somewhere in my theme's folder
-                // (with '-' for '_' in <MODULE_NAME> and <DELTA>)
-                // <DELTA> comes from array keys in hook_block_info
-                // in this case
-                // block--my-module--my-module-block1.tpl.php
-
-                'variables' => array(
-                    'forums' => NULL, 'topics' => NULL, 'parents' => NULL
-                ),
-                '#attached' => array(
-                    'libraries_load' => array(
-                        array(
-                            'fancytree'
-                        ),
-                        array(
-                            'ajaxsolr'
-                        ),
-                        array(
-                            'typeahead'
-                        ),
-                        array(
-                            'shanti_kmaps_typeahead'
-                        ),
-                    ),
-                    'library' => array(
-                        'system', 'drupal.ajax'
-                    ),
-                )
-            )
+        'kmaps_navigator_block' => array(
+            'path' => drupal_get_path('module', 'kmaps_navigator') . '/templates',
+            'template' => 'kmaps_navigator_block',
+            'variables' => array(
+                'forums' => NULL, 'topics' => NULL, 'parents' => NULL, 'filters' => NULL,
+            ),
+        ),
     );
-
     // error_log("kmaps_navigator_theme returning: " . print_r($ret,true));
-
     return $ret;
-
 }
-
-

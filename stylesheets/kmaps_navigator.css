@@ -8,7 +8,8 @@
 */
 
 .advanced-view {
-    display: none;
+    display: block;
+    /* display: none; */
 }
 .delete-me, .kmap-item {
     cursor:pointer;
