@@ -41,7 +41,9 @@ function kmaps_navigator_block_view($delta = '') {
                     'forums' => 'f',
                     'topics' => 't',
                     'parents' => 'p',
-                    'filters' => shanti_kmaps_admin_search_filters('kmaps_navigator'),
+                    'domain' => 'Places',
+                    'search' => shanti_kmaps_admin_search_field('kmaps-navigator', 'places'),
+                    'filters' => shanti_kmaps_admin_search_filters('kmaps-navigator'),
                 )),
                 '#attached' => array(
                     'library' => array(
@@ -69,7 +71,7 @@ function kmaps_navigator_block_view($delta = '') {
                             'data' => array(
                                 'shanti_kmaps_admin' => array(
                                     'kmaps_filter' => array(
-                                        'kmaps_navigator' => array(
+                                        'kmaps-navigator' => array(
                                             'domain' => 'places',
                                             'root_kmap_path' => '',
                                         ),
@@ -95,10 +97,9 @@ function kmaps_navigator_theme() {
             'path' => drupal_get_path('module', 'kmaps_navigator') . '/templates',
             'template' => 'kmaps_navigator_block',
             'variables' => array(
-                'forums' => NULL, 'topics' => NULL, 'parents' => NULL, 'filters' => NULL,
+                'forums' => NULL, 'topics' => NULL, 'parents' => NULL, 'domain' => NULL, 'search' => NULL, 'filters' => NULL,
             ),
         ),
     );
-    // error_log("kmaps_navigator_theme returning: " . print_r($ret,true));
     return $ret;
 }

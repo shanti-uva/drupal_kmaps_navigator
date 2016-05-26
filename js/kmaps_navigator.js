@@ -76,8 +76,11 @@
                         domain: domain,
                         root_kmapid: root_kmapid,
                         max_terms: 20,
-                        min_chars: 1,
+                        min_chars: 0,
                         pager: 'on',
+                        empty_query: '*:*',
+                        empty_limit: 20,
+                        empty_sort: 'header ASC',
                         filters: admin.shanti_kmaps_admin_solr_filter_query ? admin.shanti_kmaps_admin_solr_filter_query : '',
                         no_results_msg: 'Showing the whole tree.'
                     }).kmapsTypeahead('onSuggest',
