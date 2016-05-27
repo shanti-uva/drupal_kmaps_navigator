@@ -126,19 +126,8 @@
                         function (ev, sel) {
                             var id = sel.doc.id.substring(sel.doc.id.indexOf('-') + 1);
                             // console.log(JSON.stringify(sel, undefined, 2));
-                            ////    INSERT NAVIGATION CODE HERE!
-                            $typeahead.typeahead('val', search_key);
-                            // $typeahead.kmapsTypeahead('setValue', search_key, false, 20 * Math.floor(sel.index/20)); // set search field back to what it was, including the start
+                            $typeahead.typeahead('val', search_key); // revert back to search key
                             Drupal.ajax["ajax-id-" + root_kmapid].createAction(id, domain);
-                        }
-                    ).bind('typeahead:cursorchange',
-                        function (ev, suggestion) {
-                            if (typeof suggestion != 'undefined') {
-                                var tree = $tree.fancytree('getTree');
-                                var id = suggestion.doc.id.substring(suggestion.doc.id.indexOf('-') + 1);
-                                tree.activateKey(id);
-                                tree.getNodeByKey(id).scrollIntoView();
-                            }
                         }
                     ).on('input',
                         function () {
@@ -605,7 +594,7 @@
                             } else {
                                 jQuery('<div id="' + warnid + '" class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + warnhtml + '</div>').fadeIn().appendTo('#notification-wrapper');
                             }
-                        }
+                        };
 
                         if ($('#notification-wrapper div#' + warnid).length) {
                             $('#notification-wrapper div#' + warnid).fadeOut('slow', wonk);
@@ -622,7 +611,7 @@
                             $('#notification-wrapper div').fadeOut('slow').remove()
                         }
                     }
-                }
+                };
                 // SOLR AJAX
                 //
                 var kms = $("#kmaps-navigator-search-term"); // the main search input
@@ -705,7 +694,7 @@
         }
 
         return false;
-    }
+    };
 
     // Create the custom actions and execute it
 
@@ -733,7 +722,7 @@
         }
         //console.error("Executing action navigate-" + $app + '-' + $id);
         Drupal.ajax['navigate-' + $app + '-' + $id].executeAction();
-    }
+    };
 
 
 })(jQuery);
