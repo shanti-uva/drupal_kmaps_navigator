@@ -123,33 +123,13 @@
                             search_key = $typeahead.typeahead('val'); //get search term
                         }
                     ).bind('typeahead:select',
-                        function (ev, suggestion) {
-                            var id = suggestion.doc.id.substring(suggestion.doc.id.indexOf('-') + 1);
-                            console.log(JSON.stringify(suggestion, undefined, 2));
-
+                        function (ev, sel) {
+                            var id = sel.doc.id.substring(sel.doc.id.indexOf('-') + 1);
+                            // console.log(JSON.stringify(sel, undefined, 2));
                             ////    INSERT NAVIGATION CODE HERE!
-
-
-
-
-
-
-
-
-
+                            $typeahead.typeahead('val', search_key);
+                            // $typeahead.kmapsTypeahead('setValue', search_key, false, 20 * Math.floor(sel.index/20)); // set search field back to what it was, including the start
                             Drupal.ajax["ajax-id-" + root_kmapid].createAction(id, domain);
-
-
-
-
-
-
-
-
-
-
-
-
                         }
                     ).bind('typeahead:cursorchange',
                         function (ev, suggestion) {
