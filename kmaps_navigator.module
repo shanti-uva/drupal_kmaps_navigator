@@ -72,7 +72,7 @@ function kmaps_navigator_block_view($delta = '') {
                                 'shanti_kmaps_admin' => array(
                                     'kmaps_filter' => array(
                                         'kmaps-navigator' => array(
-                                            'domain' => 'places',
+                                            'domain' => 'places', // places should not be hard-coded
                                             'root_kmap_path' => '',
                                         ),
                                     ),
