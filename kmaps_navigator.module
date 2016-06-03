@@ -43,7 +43,7 @@ function kmaps_navigator_block_view($delta = '') {
                     'parents' => 'p',
                     'domain' => 'Places',
                     'search' => shanti_kmaps_admin_search_field('kmaps-navigator', 'places'),
-                    'filters' => shanti_kmaps_admin_search_filters('kmaps-navigator'),
+                    'filters' => shanti_kmaps_admin_search_filters('kmaps-navigator', 'places'),
                 )),
                 '#attached' => array(
                     'library' => array(
