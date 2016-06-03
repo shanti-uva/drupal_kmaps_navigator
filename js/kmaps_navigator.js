@@ -81,6 +81,7 @@
                         empty_query: '*:*',
                         empty_limit: 20,
                         empty_sort: 'header_s ASC', // sortable header field
+                        sort: 'header_s ASC', // sort even when there's a search term
                         filters: admin.shanti_kmaps_admin_solr_filter_query ? admin.shanti_kmaps_admin_solr_filter_query : '',
                         no_results_msg: 'Showing the whole tree.'
                     }).kmapsTypeahead('onSuggest',
