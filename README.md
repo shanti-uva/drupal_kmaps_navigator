@@ -1,3 +1,6 @@
+*EOL Notice*: This module has been merged into [KMaps Explorer](https://github.com/shanti-uva/drupal_kmaps_explorer)
+
+----
 Drupal KMaps Navigator Module
 
 A Drupal block module that provides kmaps search and tree navigation.
