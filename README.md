@@ -1,4 +1,4 @@
-*EOL Notice*: This module has been merged into [KMaps Explorer](https://github.com/shanti-uva/drupal_kmaps_explorer)
+**_EOL Notice_, 12 June 2016: This module has been merged into [KMaps Explorer](https://github.com/shanti-uva/drupal_kmaps_explorer)**
 
 ----
 Drupal KMaps Navigator Module
