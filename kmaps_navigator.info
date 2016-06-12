@@ -3,13 +3,7 @@ description = A drupal module to provide a kmaps navigator in a block.
 core = 7.x
 package = SHANTI
 
-configure = admin/config/content/shanti_kmaps_fields
-
 dependencies[] = jquery_update
 dependencies[] = shanti_kmaps_admin
 dependencies[] = shanti_kmaps_typeahead
 dependencies[] = shanti_kmaps_tree
-
-files[] = shanti_kmaps_fields.module
-files[] = shanti_kmaps_fields.install
-files[] = shanti_kmaps_fields.kmaps_api.inc
