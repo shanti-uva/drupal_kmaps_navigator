@@ -40,20 +40,6 @@
 /* Typeahead KMaps: reset search button */
 .input-section .kmap-typeahead-picker .searchreset {
     position: absolute;
-    top: 2.5rem;
-    right: 2.5rem;
+    right: 3.5rem;
+    top: 3.7rem;
 }
-/*
-.input-section .kmap-typeahead-picker .searchreset .icon {
-  cursor: pointer;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  background-clip: padding-box;
-  border: none;
-  position: relative;
-  top: -0.55rem;
-  left: 0;
-  background: transparent;
-}
-*/
