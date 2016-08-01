@@ -37,9 +37,3 @@
 
 
 
-/* Typeahead KMaps: reset search button */
-.input-section .kmap-typeahead-picker .searchreset {
-    position: absolute;
-    right: 3.5rem;
-    top: 3.7rem;
-}
